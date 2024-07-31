@@ -244,6 +244,7 @@ public class Episode extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
