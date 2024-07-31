@@ -1,6 +1,16 @@
 package com.my.audio_video_fm;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -8,8 +18,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.my.audio_video_fm.model.EpisodeItem;
@@ -18,23 +34,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Episode extends AppCompatActivity {
-    private ImageView targetImageView, playMusic, forward10Sec, replay10Sec, nextMusic, beforeMusic;
+    private ImageView targetImageView, playMusic, forward10Sec, replay10Sec, nextMusic, beforeMusic, bulutooth;
     private MediaPlayer mediaPlayer;
     private SeekBar musicSeekBar;
-    TextView go;
-    private TextView startTimeline, endTimeline;
+    private TextView go, startTimeline, endTimeline, musictext;
     private Handler handler = new Handler();
     private Runnable updateRunnable;
     private boolean isPlaying = false;
-    private TextView musictext;
     private List<EpisodeItem> musicList = new ArrayList<>();
     private int currentIndex = 0;
 
+    private static final int REQUEST_ENABLE_BT = 1;
+
+
+    private BluetoothAdapter bluetoothAdapter;
+    private ActivityResultLauncher<Intent> enableBluetoothLauncher;
+    private static final int REQUEST_BLUETOOTH_PERMISSIONS = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_episode);
 
+        // Initialize views
         targetImageView = findViewById(R.id.imageView);
         playMusic = findViewById(R.id.playmusic);
         musictext = findViewById(R.id.musicTitle);
@@ -45,8 +66,20 @@ public class Episode extends AppCompatActivity {
         musicSeekBar = findViewById(R.id.musicSeekBar);
         startTimeline = findViewById(R.id.starttimeline);
         endTimeline = findViewById(R.id.endtimeline);
-        go=findViewById(R.id.go);
+        go = findViewById(R.id.go);
+        bulutooth = findViewById(R.id.bulutooth);
 
+
+
+bulutooth.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        toggleBluetooth();
+    }
+});
+
+
+        // Initialize media player with EpisodeItem
         String imageUrl = getIntent().getStringExtra("IMAGE_URL");
         String imageUrl1 = getIntent().getStringExtra("image_url");
         String title = getIntent().getStringExtra("title");
@@ -65,14 +98,13 @@ public class Episode extends AppCompatActivity {
                     .error(R.drawable.ic_audiotrack)
                     .into(targetImageView);
         }
-
         if (title != null) {
             musictext.setText(title);
         } else {
             Log.e("EpisodeActivity", "Title not received");
         }
 
-        // Initialize music list with EpisodeItem
+        // Initialize music list
         musicList.add(new EpisodeItem(imageUrl, title, "3:00", R.raw.music1));
         musicList.add(new EpisodeItem(imageUrl, title, "4:00", R.raw.music2));
         musicList.add(new EpisodeItem(imageUrl, title, "2:30", R.raw.music3));
@@ -114,22 +146,15 @@ public class Episode extends AppCompatActivity {
                 }
             });
         }
-        go.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
+        go.setOnClickListener(v -> finish());
         ImageView backButton = findViewById(R.id.back);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Finish the current activity
+        if (backButton != null) {
+            backButton.setOnClickListener(v -> {
                 finish();
-                // Optional: add a transition animation
-                overridePendingTransition(0,R.anim.slide_out_down);
-            }
-        });
+                overridePendingTransition(0, R.anim.slide_out_down);
+            });
+        }
     }
 
     private void initializeMediaPlayer(EpisodeItem episodeItem) {
@@ -146,11 +171,28 @@ public class Episode extends AppCompatActivity {
         }
     }
 
+
+
+    private void toggleBluetooth() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            Toast.makeText(getApplicationContext(), "Bluetooth not supported on this device", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        } else {
+            Toast.makeText(getApplicationContext(), "Bluetooth is already enabled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void playMusic() {
         if (mediaPlayer != null) {
             mediaPlayer.start();
             isPlaying = true;
-            playMusic.setImageResource(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your pause icon
+            playMusic.setImageResource(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24);
             handler.post(updateRunnable);
         }
     }
@@ -159,10 +201,13 @@ public class Episode extends AppCompatActivity {
         if (mediaPlayer != null) {
             mediaPlayer.pause();
             isPlaying = false;
-            playMusic.setImageResource(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your play icon
+            playMusic.setImageResource(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24);
             handler.removeCallbacks(updateRunnable);
         }
     }
+
+
+
 
     private void forward10Seconds() {
         if (mediaPlayer != null) {
@@ -190,31 +235,31 @@ public class Episode extends AppCompatActivity {
         if (!musicList.isEmpty() && currentIndex < musicList.size() - 1) {
             currentIndex++;
             initializeMediaPlayer(musicList.get(currentIndex));
-            musictext.setText(musicList.get(currentIndex).getIconResId());// Initializes media player with the new track
-            playMusic(); // Starts playing the new track
-            updateTitle(musicList.get(currentIndex)); // Update title when changing track
+            musictext.setText(musicList.get(currentIndex).getTitle());
+            playMusic();
+            updateTitle(musicList.get(currentIndex));
         }
     }
+
+
 
     private void playPreviousMusic() {
         if (!musicList.isEmpty() && currentIndex > 0) {
             currentIndex--;
             initializeMediaPlayer(musicList.get(currentIndex));
-            musictext.setText(musicList.get(currentIndex).getIconResId());// Initializes media player with the new track
-            playMusic(); // Starts playing the new track
-            updateTitle(musicList.get(currentIndex)); // Update title when changing track
+            musictext.setText(musicList.get(currentIndex).getTitle());
+            playMusic();
+            updateTitle(musicList.get(currentIndex));
         }
     }
 
-
     private void updateTitle(EpisodeItem episodeItem) {
         if (episodeItem != null) {
-            musictext.setText(episodeItem.getTitle()); // Update the title TextView
+            musictext.setText(episodeItem.getTitle());
         } else {
             Log.e("EpisodeActivity", "EpisodeItem is null");
         }
     }
-
 
     private String formatTime(int timeInSeconds) {
         int minutes = timeInSeconds / 60;
@@ -224,7 +269,7 @@ public class Episode extends AppCompatActivity {
 
     private void updateSeekBar() {
         if (mediaPlayer != null) {
-            int currentPosition = mediaPlayer.getCurrentPosition() / 1000; // Position in seconds
+            int currentPosition = mediaPlayer.getCurrentPosition() / 1000;
             musicSeekBar.setProgress(currentPosition);
             startTimeline.setText(formatTime(currentPosition));
             updateRunnable = new Runnable() {
