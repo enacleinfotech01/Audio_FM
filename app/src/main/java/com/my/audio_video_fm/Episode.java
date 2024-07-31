@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,7 +16,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +26,7 @@ import com.my.audio_video_fm.model.EpisodeItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.Manifest;
 
 public class Episode extends AppCompatActivity {
     private ImageView targetImageView, playMusic, forward10Sec, replay10Sec, nextMusic, beforeMusic;
@@ -29,9 +34,9 @@ public class Episode extends AppCompatActivity {
     private SeekBar musicSeekBar;
     TextView go;
     private static final int REQUEST_ENABLE_BT = 1;
-
-
+    private static final int REQUEST_BLUETOOTH_PERMISSIONS = 100;
     private BluetoothAdapter bluetoothAdapter;
+
     private TextView startTimeline, endTimeline;
     private Handler handler = new Handler();
     private Runnable updateRunnable;
@@ -58,7 +63,7 @@ public class Episode extends AppCompatActivity {
         musicSeekBar = findViewById(R.id.musicSeekBar);
         startTimeline = findViewById(R.id.starttimeline);
         endTimeline = findViewById(R.id.endtimeline);
-        go=findViewById(R.id.go);
+        go = findViewById(R.id.go);
 
         bluetooth = findViewById(R.id.bluetooth);
         bluetooth.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +152,7 @@ public class Episode extends AppCompatActivity {
                 // Finish the current activity
                 finish();
                 // Optional: add a transition animation
-                overridePendingTransition(0,R.anim.slide_out_down);
+                overridePendingTransition(0, R.anim.slide_out_down);
             }
         });
     }
@@ -183,6 +188,7 @@ public class Episode extends AppCompatActivity {
             handler.removeCallbacks(updateRunnable);
         }
     }
+
     private void toggleBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
@@ -190,11 +196,63 @@ public class Episode extends AppCompatActivity {
             return;
         }
 
+        if (!hasBluetoothPermissions()) {
+            requestBluetoothPermissions();
+        } else {
+            enableBluetooth();
+        }
+    }
+
+    private void enableBluetooth() {
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
             Toast.makeText(getApplicationContext(), "Bluetooth is already enabled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean hasBluetoothPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12 (API 31) and above
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    private void requestBluetoothPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12 (API 31) and above
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH_SCAN
+            }, REQUEST_BLUETOOTH_PERMISSIONS);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN
+            }, REQUEST_BLUETOOTH_PERMISSIONS);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_BLUETOOTH_PERMISSIONS) {
+            boolean permissionsGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    permissionsGranted = false;
+                    break;
+                }
+            }
+
+            if (permissionsGranted) {
+                enableBluetooth();
+            } else {
+                Toast.makeText(this, "Bluetooth permissions are required", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     private void forward10Seconds() {
