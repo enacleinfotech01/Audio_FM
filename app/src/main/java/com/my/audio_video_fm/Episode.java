@@ -2,6 +2,7 @@ package com.my.audio_video_fm;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -26,6 +28,10 @@ public class Episode extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private SeekBar musicSeekBar;
     TextView go;
+    private static final int REQUEST_ENABLE_BT = 1;
+
+
+    private BluetoothAdapter bluetoothAdapter;
     private TextView startTimeline, endTimeline;
     private Handler handler = new Handler();
     private Runnable updateRunnable;
@@ -54,6 +60,13 @@ public class Episode extends AppCompatActivity {
         endTimeline = findViewById(R.id.endtimeline);
         go=findViewById(R.id.go);
 
+        bluetooth = findViewById(R.id.bluetooth);
+        bluetooth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleBluetooth();
+            }
+        });
         String imageUrl = getIntent().getStringExtra("IMAGE_URL");
         String imageUrl1 = getIntent().getStringExtra("image_url");
         String title = getIntent().getStringExtra("title");
@@ -170,7 +183,20 @@ public class Episode extends AppCompatActivity {
             handler.removeCallbacks(updateRunnable);
         }
     }
+    private void toggleBluetooth() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            Toast.makeText(getApplicationContext(), "Bluetooth not supported on this device", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        } else {
+            Toast.makeText(getApplicationContext(), "Bluetooth is already enabled", Toast.LENGTH_SHORT).show();
+        }
+    }
     private void forward10Seconds() {
         if (mediaPlayer != null) {
             int currentPosition = mediaPlayer.getCurrentPosition();
