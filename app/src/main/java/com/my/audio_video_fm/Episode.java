@@ -1,5 +1,8 @@
 package com.my.audio_video_fm;
 
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +13,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.my.audio_video_fm.model.EpisodeItem;
@@ -27,9 +31,12 @@ public class Episode extends AppCompatActivity {
     private Runnable updateRunnable;
     private boolean isPlaying = false;
     private TextView musictext;
+    private ImageView bluetooth;
     private List<EpisodeItem> musicList = new ArrayList<>();
     private int currentIndex = 0;
+    private static final String TAG = "Episode";
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,6 +243,7 @@ public class Episode extends AppCompatActivity {
             handler.postDelayed(updateRunnable, 1000);
         }
     }
+
 
     @Override
     protected void onDestroy() {

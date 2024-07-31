@@ -49,6 +49,7 @@ public class HomeFragment extends Fragment {
     private DotsIndicator dotsIndicator;
     private Handler handler;
     private Runnable runnable;
+
     private RecyclerView categoriesRecyclerView;
     private CategoryAdapter categoryAdapter;
     private List<Category> categories;
