@@ -7,10 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -52,12 +55,12 @@ public class HomeFragment extends Fragment {
     private OkHttpClient client = new OkHttpClient();
     private static final String JSON_URL = "https://api.npoint.io/dbb28723c94bbbc7c5e5";
     private List<Integer> imageList;
-
+    TextView search;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        search = view.findViewById(R.id.search);
         // Initialize views
         initializeViews(view);
 
@@ -66,7 +69,13 @@ public class HomeFragment extends Fragment {
 
         // Fetch JSON data from the URL
         fetchJsonData(JSON_URL);
-
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(HomeFragment.this);
+                navController.navigate(R.id.searchFragment);
+            }
+        });
         return view;
     }
 
