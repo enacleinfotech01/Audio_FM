@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Audio_Video_FM</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="music">
+Corner Radius: Adjust the android:radius attribute in rounded_background.xml to set your desired corner radius.
+Background Color: Change the android:color attribute to the grey color you want. You can use color codes or resources as needed.
+Dimensions: Ensure @dimen/_50sdp in fragment_play.xml corresponds to your required size.
+4. Ensure Drawable Resources Exist
+Play Icon: Ensure res/drawable/play.xml or res/drawable/play.png exists.
+Pause Icon: Ensure res/drawable/pause.xml or res/drawable/pause.png exists.
+Summary
+Create a drawable resource (rounded_background.xml) with rounded corners and a grey background.
+Set this drawable as the background for your ImageView in the layout XML.
+Ensure all drawable resources used in the ImageView (like play/pause icons) are available.
+If you need further adjustments or have specific questions, feel free to ask!</string>
+</resources>
