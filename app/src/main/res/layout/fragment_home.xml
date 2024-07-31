@@ -23,6 +23,7 @@
             android:layout_marginHorizontal="@dimen/_5sdp"/>
         <TextView
             android:layout_width="match_parent"
+            android:id="@+id/search"
             android:layout_height="@dimen/_30sdp"
             android:layout_gravity="center"
             android:layout_weight="1"
