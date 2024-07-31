@@ -1,15 +1,21 @@
 package com.my.audio_video_fm;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,14 +25,16 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.my.audio_video_fm.model.EpisodeItem;
+import com.my.audio_video_fm.model.MediaItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Episode extends AppCompatActivity {
+public class Episode extends AppCompatActivity implements TimerBottomSheetFragment.TimerSelectionListener {
     private ImageView targetImageView, playMusic, forward10Sec, replay10Sec, nextMusic, beforeMusic;
     private MediaPlayer mediaPlayer;
     private SeekBar musicSeekBar;
+    private CountDownTimer countDownTimer;
     TextView go;
     private static final int REQUEST_ENABLE_BT = 1;
 
@@ -40,6 +48,7 @@ public class Episode extends AppCompatActivity {
     private ImageView bluetooth;
     private List<EpisodeItem> musicList = new ArrayList<>();
     private int currentIndex = 0;
+    TextView bottomtime;
     private static final String TAG = "Episode";
 
     @SuppressLint("MissingInflatedId")
@@ -47,7 +56,7 @@ public class Episode extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_episode);
-
+bottomtime=findViewById(R.id.show_dialog_button);
         targetImageView = findViewById(R.id.imageView);
         playMusic = findViewById(R.id.playmusic);
         musictext = findViewById(R.id.musicTitle);
@@ -70,7 +79,11 @@ public class Episode extends AppCompatActivity {
         String imageUrl = getIntent().getStringExtra("IMAGE_URL");
         String imageUrl1 = getIntent().getStringExtra("image_url");
         String title = getIntent().getStringExtra("title");
-
+        findViewById(R.id.show_dialog_button).setOnClickListener(v -> {
+            TimerBottomSheetFragment bottomSheet = new TimerBottomSheetFragment();
+            bottomSheet.setTimerSelectionListener(this);
+            bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+        });
         if (imageUrl != null) {
             Glide.with(this)
                     .load(imageUrl)
@@ -78,6 +91,7 @@ public class Episode extends AppCompatActivity {
                     .error(R.drawable.ic_audiotrack)
                     .into(targetImageView);
         }
+
         if (imageUrl1 != null) {
             Glide.with(this)
                     .load(imageUrl1)
@@ -280,10 +294,140 @@ public class Episode extends AppCompatActivity {
         }
         handler.removeCallbacks(updateRunnable);
     }
+    @Override
+    public void onTimerSelected(String timerOption) {
+        bottomtime.setText(timerOption);
+        Log.d("Episode", "Timer set for: " + timerOption);
 
+        if ("Time Off".equals(timerOption)) {
+             // Immediately stop the music
+            cancelCountDownTimer(); // Cancel the countdown timer if it is running
+            return; // Exit early as no countdown timer is needed
+        }
+
+        long durationInMillis;
+        switch (timerOption) {
+            case "When current show ends":
+                durationInMillis = getRemainingTimeForShow();
+                break;
+            case "When current episode ends":
+                durationInMillis = getRemainingTimeForEpisode();
+                break;
+            case "30 mins":
+                durationInMillis = 30 * 60 * 1000;
+                break;
+            case "1 hour":
+                durationInMillis = 60 * 60 * 1000;
+                break;
+            default:
+                durationInMillis = 0;
+                break;
+        }
+
+        if (durationInMillis > 0) {
+            startCountDownTimert(durationInMillis);
+        }
+    }
+
+
+
+    private long getRemainingTimeForShow() {
+        if (mediaPlayer != null) {
+            int currentPosition = mediaPlayer.getCurrentPosition(); // Current position in milliseconds
+            int totalDuration = mediaPlayer.getDuration(); // Implement this method to get the total duration of the playlist
+            return totalDuration - currentPosition;
+        }
+        return 0; // Placeholder value
+    }
+    private void startCountDownTimert(long durationInMillis) {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        countDownTimer = new CountDownTimer(durationInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long hours = millisUntilFinished / 3600000;
+                long minutes = (millisUntilFinished % 3600000) / 60000;
+                long seconds = (millisUntilFinished % 60000) / 1000;
+                String timeLeft = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                bottomtime.setText(timeLeft);
+            }
+
+            @Override
+            public void onFinish() {
+                bottomtime.setText("Time's up!");
+                stopMusic();
+            }
+        }.start();
+    }
+
+
+    private void cancelCountDownTimer() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null; // Clear the reference to avoid leaks
+        }
+    }
+
+    private long getRemainingTimeForEpisode() {
+        if (mediaPlayer != null) {
+            int currentPosition = mediaPlayer.getCurrentPosition(); // Current position in milliseconds
+            int songDuration = mediaPlayer.getDuration(); // Duration of the current song in milliseconds
+            return songDuration - currentPosition;
+        }
+        return 0; // Placeholder value
+    }
+
+
+    @Override
+    public void onCustomTimerSelected(int hours, int minutes) {
+        String customTimer = hours + " hours and " + minutes + " minutes";
+        bottomtime.setText(customTimer);
+        Log.d("Episode", "Custom Timer set for: " + customTimer);
+        Toast.makeText(this, "Custom Timer set for: " + customTimer, Toast.LENGTH_SHORT).show();
+
+        long durationInMillis = (hours * 3600 + minutes * 60) * 1000;
+        startCountDownTimer(durationInMillis);
+    }
+    private void startCountDownTimer(long durationInMillis) {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+
+        countDownTimer = new CountDownTimer(durationInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long hours = millisUntilFinished / 3600000;
+                long minutes = (millisUntilFinished % 3600000) / 60000;
+                long seconds = (millisUntilFinished % 60000) / 1000;
+                String timeLeft = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                bottomtime.setText(timeLeft);
+            }
+
+            @Override
+            public void onFinish() {
+                bottomtime.setText("Time's up!");
+                stopMusic();
+            }
+        }.start();
+    }
+
+
+    private void stopMusic() {
+        // Implement the logic to stop your music playback here
+        Log.d("Episode", "Music stopped.");
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+            isPlaying = false;
+                       handler.removeCallbacks(updateRunnable);
+        }
+    }
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(0, R.anim.slide_out_down);
     }
+
 }

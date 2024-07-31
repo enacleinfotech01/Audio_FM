@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/appcolor"
+    android:padding="16dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="Set Sleep Timer"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/dialog_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:text="Choose when you want to stop your audio automaticaly"
+        android:textColor="@color/white" />
+
+    <!-- Timer Options -->
+    <RadioGroup
+        android:id="@+id/timer_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/timer_off"
+            android:textColor="@color/white"
+            app:buttonTint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time Off" />
+
+        <RadioButton
+            android:id="@+id/show_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            app:buttonTint="@color/white"
+            android:text="When current show ends" />
+
+        <RadioButton
+            android:id="@+id/episode_end"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            app:buttonTint="@color/white"
+            android:layout_height="wrap_content"
+            android:text="When current episode ends" />
+
+        <RadioButton
+            android:id="@+id/timer_30mins"
+            android:textColor="@color/white"
+            app:buttonTint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 mins" />
+
+        <RadioButton
+            android:id="@+id/timer_1hour"
+            android:textColor="@color/white"
+            app:buttonTint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 hour" />
+
+        <RadioButton
+            android:id="@+id/timer_custom"
+            android:textColor="@color/white"
+            app:buttonTint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom" />
+
+
+    </RadioGroup>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:paddingTop="16dp">
+
+        <!-- Close Button -->
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Close"
+            android:textColor="@color/white" />
+
+        <!-- Timer Off Button -->
+        <Button
+            android:id="@+id/btn_timer_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Ok"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>
