@@ -74,6 +74,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 NavController navController = NavHostFragment.findNavController(HomeFragment.this);
                 navController.navigate(R.id.searchFragment);
+
             }
         });
         return view;
