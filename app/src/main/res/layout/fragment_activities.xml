@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical"
-    android:background="@color/appcolor"
     tools:context=".fragment.ActivitiesFragment">
 
     <ImageView
@@ -17,11 +17,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No activities yet"
-        android:textColor="@color/white"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="@dimen/_15sdp"/>
+        android:text="No activities yet"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
 
 
 </LinearLayout>
