@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/appcolor"
+    android:padding="16dp">
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radio_most_recent"
+            android:layout_width="wrap_content"
+            app:buttonTint="#D81A0C"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:text="Most Recent" />
+
+        <RadioButton
+            android:id="@+id/radio_no_of_listens"
+            android:layout_width="wrap_content"
+            app:buttonTint="#D81A0C"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:text="No. of Listens" />
+
+    </RadioGroup>
+    <TextView
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_9sdp"
+        android:background="@drawable/btn_border"
+        android:backgroundTint="#D81A0C"
+        android:gravity="center"
+        android:padding="@dimen/_9sdp"
+        android:text="APPLY"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
+</LinearLayout>

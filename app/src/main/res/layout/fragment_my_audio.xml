@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
     tools:context=".fragment.MyAudioFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_11sdp"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/sortby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/arrow_drop_down_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+            android:text="Sort by"
+            android:textColor="@color/white"
+            android:paddingHorizontal="@dimen/_11sdp"
+            android:textSize="@dimen/_13sdp" />
+
+        <TextView
+            android:id="@+id/filter_text_view"
+            android:layout_width="wrap_content"
+            android:paddingHorizontal="@dimen/_11sdp"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/arrow_drop_down_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+            android:text="Filter By"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13sdp" />
+
+        <TextView
+            android:id="@+id/clear"
+            android:layout_width="match_parent"
+            android:gravity="right"
+            android:textColor="#D81A0C"
+            android:layout_height="wrap_content"
+            android:text="CLEAR ALL"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/_280sdp"
+        android:layout_height="@dimen/_230sdp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_10sdp"
+        android:src="@drawable/audio" />
+
+    <TextView
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_9sdp"
+        android:background="@drawable/btn_border"
+        android:backgroundTint="#D81A0C"
+        android:drawableLeft="@drawable/mic_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:drawableTint="@color/white"
+        android:gravity="center"
+        android:padding="@dimen/_9sdp"
+        android:text="Create Now"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
+
+</LinearLayout>

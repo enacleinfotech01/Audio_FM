@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/appcolor"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:paddingHorizontal="@dimen/_11sdp"
+        android:layout_height="wrap_content"
+        android:text="Filter By"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_13sdp" />
+
+    <CheckBox
+        android:id="@+id/checkbox_created_by_me"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buttonTint="#D81A0C"
+        android:textColor="@color/white"
+        android:text="Created by Me" />
+
+    <CheckBox
+        android:id="@+id/checkbox_only_episode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buttonTint="#D81A0C"
+        android:textColor="@color/white"
+        android:text="Only Episode" />
+
+    <CheckBox
+        android:id="@+id/checkbox_only_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buttonTint="#D81A0C"
+        android:textColor="@color/white"
+        android:text="Only Show" />
+
+    <CheckBox
+        android:id="@+id/checkbox_draft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buttonTint="#D81A0C"
+        android:textColor="@color/white"
+        android:text="Draft" />
+
+    <TextView
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_9sdp"
+        android:background="@drawable/btn_border"
+        android:backgroundTint="#D81A0C"
+        android:gravity="center"
+        android:padding="@dimen/_9sdp"
+        android:text="APPLY"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
+</LinearLayout>
