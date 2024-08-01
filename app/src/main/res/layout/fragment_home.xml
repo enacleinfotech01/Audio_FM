@@ -38,6 +38,7 @@
             android:layout_marginHorizontal="@dimen/_5sdp"
             android:background="@drawable/bg_card"/>
         <ImageView
+            android:id="@+id/langues"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_gravity="center"
@@ -46,6 +47,7 @@
             app:tint="@color/white"
             android:layout_marginVertical="@dimen/_10sdp"/>
         <ImageView
+            android:id="@+id/store"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:padding="@dimen/_5sdp"

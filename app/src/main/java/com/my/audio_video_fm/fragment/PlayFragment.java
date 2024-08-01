@@ -1,10 +1,6 @@
 package com.my.audio_video_fm.fragment;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,23 +26,27 @@ import com.my.audio_video_fm.adapter.EpisodeAdapter;
 import com.my.audio_video_fm.model.EpisodeItem;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class PlayFragment extends Fragment {
 
     private ImageView targetImageView;
     Button music;
+
     private ImageView bookmarkImageView;
-    private Set<Integer> bookmarkedMusicIds = new HashSet<>();
+
+
+
+
+
+
+
+    // Example index
+
     private ImageView playMusicImageView;
     private boolean isPlaying = false;
     private Button playPauseButton;
     private TextView textView;
-    private static final String PREFS_NAME = "bookmarks_prefs";
-    private static final String BOOKMARKS_KEY = "bookmarked_music_ids";
     private String imageUrl;
     private CardView cardView;
     private RecyclerView recyclerView;
@@ -90,6 +90,9 @@ public class PlayFragment extends Fragment {
         textView.setEllipsize(TextUtils.TruncateAt.END); // Show ellipsis when text is too long
 
         readMoreView.setOnClickListener(v -> toggleText());
+        bookmarkImageView = view.findViewById(R.id.bookmark);
+
+
 
         if (getArguments() != null) {
             String videoId = getArguments().getString("video_id");
@@ -107,7 +110,7 @@ public class PlayFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.episodes_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new EpisodeAdapter(episodeList, getContext());
+        adapter = new EpisodeAdapter(episodeList,requireActivity());
         recyclerView.setAdapter(adapter);
 
         playPauseButton.setOnClickListener(v -> togglePlayPause());
@@ -118,25 +121,20 @@ public class PlayFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), Episode.class);
                 intent.putExtra("image_url", selectedEpisode.getImageUrl());
                 intent.putExtra("title", selectedEpisode.getTitle());
-               startActivity(intent);
+                startActivity(intent);
             } else {
                 Toast.makeText(getContext(), "No episodes available", Toast.LENGTH_SHORT).show();
             }
         });
 
 
-        updateBookmarkIcon();
 
-        bookmarkImageView.setOnClickListener(v -> {
-            toggleBookmark();
-            updateBookmarkIcon();
-        });
 
-        loadBookmarks();
 
         bookmarkImageView.setImageResource(R.drawable.bookmarks_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with a default icon if necessary
 
     }
+
 
     private void displayThumbnail(String thumbnailUrl) {
         Log.d("PlayFragment", "Image URL: " + thumbnailUrl);
@@ -213,60 +211,8 @@ public class PlayFragment extends Fragment {
         isPlaying = !isPlaying; // Toggle playback state
     }
 
-    private void toggleBookmark() {
-        if (episodeList != null && !episodeList.isEmpty() && currentIndex >= 0 && currentIndex < episodeList.size()) {
-            int currentTrackId = episodeList.get(currentIndex).getIconResId();
-
-            if (bookmarkedMusicIds.contains(currentTrackId)) {
-                // Remove from bookmarks
-                bookmarkedMusicIds.remove(currentTrackId);
-                Toast.makeText(getContext(), "Removed from bookmarks", Toast.LENGTH_SHORT).show();
-            } else {
-                // Add to bookmarks
-                bookmarkedMusicIds.add(currentTrackId);
-                Toast.makeText(getContext(), "Added to bookmarks", Toast.LENGTH_SHORT).show();
-            }
-
-            // Save the updated bookmark state
-            saveBookmarks();
-            // Update the bookmark icon
-            updateBookmarkIcon();
-        } else {
-            Toast.makeText(getContext(), "No episode selected", Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
-    private void updateBookmarkIcon() {
-        if (episodeList != null && !episodeList.isEmpty() && currentIndex >= 0 && currentIndex < episodeList.size()) {
-            int currentTrackId = episodeList.get(currentIndex).getIconResId();
-
-            if (bookmarkedMusicIds.contains(currentTrackId)) {
-                bookmarkImageView.setImageResource(R.drawable.bookmarks_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your bookmarked icon
-            } else {
-                bookmarkImageView.setImageResource(R.drawable.bookmark_remove_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your unbookmarked icon
-            }
-        } else {
-            // Default icon when there is no valid episode
-            bookmarkImageView.setImageResource(R.drawable.bookmarks_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with a default icon if necessary
-        }
-    }
-
-
-    private void saveBookmarks() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putStringSet(BOOKMARKS_KEY, bookmarkedMusicIds.stream().map(String::valueOf).collect(Collectors.toSet()));
-        editor.apply();
-        Toast.makeText(getContext(), "Bookmarks saved", Toast.LENGTH_SHORT).show(); // Show a toast message
-    }
-
-
-    private void loadBookmarks() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Set<String> bookmarkedSet = prefs.getStringSet(BOOKMARKS_KEY, new HashSet<>());
-        bookmarkedMusicIds = bookmarkedSet.stream().map(Integer::valueOf).collect(Collectors.toSet());
-    }
 
 
 

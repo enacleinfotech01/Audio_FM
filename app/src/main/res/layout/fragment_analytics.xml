@@ -2,18 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_height="match_parent"
     android:background="@color/appcolor"
+    android:orientation="vertical"
     tools:context=".fragment.AnalyticsFragment">
 
 
     <ImageView
         android:layout_width="@dimen/_280sdp"
-        android:layout_height="@dimen/_280sdp"
+        android:layout_height="@dimen/_220sdp"
         android:layout_gravity="center"
         android:layout_margin="@dimen/_10sdp"
         android:src="@drawable/anylitic" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="No data yet"
+        android:textColor="#D81A0C"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="You haven't created any audios yet "
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14sdp" />
+
+    <TextView
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_9sdp"
+        android:background="@drawable/btn_border"
+        android:backgroundTint="#D81A0C"
+        android:drawableLeft="@drawable/mic_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:drawableTint="@color/white"
+        android:gravity="center"
+        android:padding="@dimen/_9sdp"
+        android:text="Create Now"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
 </LinearLayout>

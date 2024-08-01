@@ -15,19 +15,25 @@ import com.bumptech.glide.Glide;
 import com.my.audio_video_fm.Episode;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.model.EpisodeItem;
-import com.my.audio_video_fm.playvideo;
+
 
 import java.util.List;
 
 public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder> {
 
-    private List<EpisodeItem> episodeList;
-    private Context context;
-
     public EpisodeAdapter(List<EpisodeItem> episodeList, Context context) {
         this.episodeList = episodeList;
         this.context = context;
+
     }
+
+    private List<EpisodeItem> episodeList;
+    private Context context;
+
+
+
+
+
 
     @NonNull
     @Override

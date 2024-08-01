@@ -46,9 +46,16 @@
         android:layout_width="@dimen/_280sdp"
         android:layout_height="@dimen/_230sdp"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_margin="@dimen/_5sdp"
         android:src="@drawable/audio" />
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="You haven't created any audio yet "
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_14sdp" />
     <TextView
         android:layout_width="@dimen/_240sdp"
         android:layout_height="wrap_content"

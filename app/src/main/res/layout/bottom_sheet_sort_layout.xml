@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/appcolor"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <RadioGroup
@@ -15,20 +15,21 @@
         <RadioButton
             android:id="@+id/radio_most_recent"
             android:layout_width="wrap_content"
-            app:buttonTint="#D81A0C"
-            android:textColor="@color/white"
             android:layout_height="wrap_content"
-            android:text="Most Recent" />
+            android:text="Most Recent"
+            android:textColor="@color/white"
+            app:buttonTint="#D81A0C" />
 
         <RadioButton
             android:id="@+id/radio_no_of_listens"
             android:layout_width="wrap_content"
-            app:buttonTint="#D81A0C"
-            android:textColor="@color/white"
             android:layout_height="wrap_content"
-            android:text="No. of Listens" />
+            android:text="No. of Listens"
+            android:textColor="@color/white"
+            app:buttonTint="#D81A0C" />
 
     </RadioGroup>
+
     <TextView
         android:layout_width="@dimen/_240sdp"
         android:layout_height="wrap_content"

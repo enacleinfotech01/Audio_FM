@@ -24,8 +24,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.my.audio_video_fm.LanguageBottomSheetDialog;
 import com.my.audio_video_fm.Profile;
 import com.my.audio_video_fm.R;
+import com.my.audio_video_fm.StoreCoins;
 import com.my.audio_video_fm.adapter.CategoryAdapter;
 import com.my.audio_video_fm.adapter.ViewPagerAdapter;
 import com.my.audio_video_fm.model.Category;
@@ -49,6 +51,8 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private ViewPager2 viewPager;
     ImageView profile;
+    ImageView langues;
+    ImageView store;
     private DotsIndicator dotsIndicator;
     private Handler handler;
     private Runnable runnable;
@@ -67,6 +71,31 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         search = view.findViewById(R.id.search);
         profile = view.findViewById(R.id.profile);
+        langues = view.findViewById(R.id.langues);
+        store=view.findViewById(R.id.store);
+
+        store.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireActivity(), StoreCoins.class);
+                startActivity(intent);
+            }
+        });
+
+        langues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LanguageBottomSheetDialog bottomSheetDialog = new LanguageBottomSheetDialog();
+                bottomSheetDialog.setOnLanguageSelectedListener(new LanguageBottomSheetDialog.OnLanguageSelectedListener() {
+                    @Override
+                    public void onLanguageSelected(String language) {
+                        Toast.makeText(requireContext(), "Selected: " + language, Toast.LENGTH_SHORT).show();
+                        // Handle language selection
+                    }
+                });
+                bottomSheetDialog.show(getChildFragmentManager(), "LanguageBottomSheet");
+            }
+        });
         // Initialize views
         initializeViews(view);
 
