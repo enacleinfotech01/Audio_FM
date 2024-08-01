@@ -3,6 +3,7 @@ package com.my.audio_video_fm.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,7 +141,7 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(adapter);
         dotsIndicator.setViewPager2(viewPager);
 
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -150,8 +151,23 @@ public class HomeFragment extends Fragment {
                 handler.postDelayed(this, 3000); // Auto-scroll every 3 seconds
             }
         };
+
+        // Register the page change callback to reset the auto-scroll timer on user scroll
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                // Remove and restart the auto-scroll timer to ensure it resumes correctly
+                handler.removeCallbacks(runnable);
+                handler.postDelayed(runnable, 3000);
+            }
+        });
+
+        // Start auto-scrolling
         handler.postDelayed(runnable, 3000);
     }
+
+
+
 
     private void fetchJsonData(String url) {
         // Create a request to fetch data from the provided URL
@@ -244,4 +260,5 @@ public class HomeFragment extends Fragment {
         handler.removeCallbacks(runnable);
         Log.d(TAG, "Handler callbacks removed");
     }
+
 }
