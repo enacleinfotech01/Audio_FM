@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.my.audio_video_fm.Profile;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.adapter.CategoryAdapter;
 import com.my.audio_video_fm.adapter.ViewPagerAdapter;
@@ -46,6 +48,7 @@ import okhttp3.Response;
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private ViewPager2 viewPager;
+    ImageView profile;
     private DotsIndicator dotsIndicator;
     private Handler handler;
     private Runnable runnable;
@@ -57,13 +60,23 @@ public class HomeFragment extends Fragment {
     private static final String JSON_URL = "https://api.npoint.io/dbb28723c94bbbc7c5e5";
     private List<Integer> imageList;
     TextView search;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         search = view.findViewById(R.id.search);
+        profile = view.findViewById(R.id.profile);
         // Initialize views
         initializeViews(view);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireActivity(), Profile.class);
+                startActivity(intent);
+            }
+        });
 
         // Setup ViewPager for image slider
         setupViewPager();

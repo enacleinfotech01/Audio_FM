@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/blue_black_gradient"
+    android:orientation="vertical"
+    tools:context=".Profile">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:src="@drawable/arrow_back_24dp_ff000000_fill0_wght400_grad0_opsz24" />
+
+        <TextView
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingHorizontal="@dimen/_9sdp"
+            android:text="Tech"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp" />
+
+        <ImageView
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:src="@drawable/notifications_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+
+        <ImageView
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:src="@drawable/edit_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+
+        <ImageView
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:src="@drawable/settings_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_32sdp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_9sdp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:src="@drawable/image" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="Followers"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="59dp"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+
+                android:text="Following"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="59dp"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sdp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+
+                android:gravity="center"
+                android:text="Plays"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/_19sdp"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:textColor="@color/gray"
+        android:layout_height="wrap_content"
+        android:text="Listen to what you Love"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="match_parent"
+        android:id="@+id/studio"
+        android:layout_height="@dimen/_40sdp"
+        android:textSize="@dimen/_12sdp"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/appcolor"
+        android:text="Studio"
+        app:elevation="@dimen/_10sdp"
+        android:elevation="@dimen/_10sdp"
+        app:cornerRadius="@dimen/_10sdp"
+        android:layout_margin="@dimen/_10sdp"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000FF"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabIndicatorHeight="4dp"
+        app:tabSelectedTextColor="@android:color/white"
+     app:tabTextColor="@color/white" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout" />
+
+</LinearLayout>
