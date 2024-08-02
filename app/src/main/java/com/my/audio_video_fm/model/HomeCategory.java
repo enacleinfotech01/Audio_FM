@@ -2,11 +2,11 @@ package com.my.audio_video_fm.model;
 
 import java.util.List;
 
-public class Category {
+public class HomeCategory {
     private String name;
     private List<MediaItem> items;
 
-    public Category(String name, List<MediaItem> items) {
+    public HomeCategory(String name, List<MediaItem> items) {
         this.name = name;
         this.items = items;
     }

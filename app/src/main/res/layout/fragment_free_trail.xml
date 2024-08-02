@@ -76,8 +76,7 @@ android:layout_margin="@dimen/_10sdp"
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/phonepe" />
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:layout_width="@dimen/_210sdp"

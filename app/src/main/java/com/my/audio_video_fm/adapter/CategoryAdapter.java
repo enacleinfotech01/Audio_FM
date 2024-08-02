@@ -1,66 +1,59 @@
+// CategoryAdapter.java
 package com.my.audio_video_fm.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.my.audio_video_fm.R;
-import com.my.audio_video_fm.model.Category;
 
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-    private List<Category> categories;
-    private Context context;
-    private ItemAdapter.OnItemClickListener itemClickListener;
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
-    public CategoryAdapter(List<Category> categories, Context context, ItemAdapter.OnItemClickListener itemClickListener) {
-        this.categories = categories;
+    private Context context;
+    private List<String> imageUrls;
+
+    public CategoryAdapter(Context context, List<String> imageUrls) {
         this.context = context;
-        this.itemClickListener = itemClickListener;
+        this.imageUrls = imageUrls;
     }
 
     @NonNull
     @Override
-    public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.category_item, parent, false);
-        return new CategoryViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        Category category = categories.get(position);
-        holder.categoryName.setText(category.getName());
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String imageUrl = imageUrls.get(position);
 
-        ItemAdapter itemAdapter = new ItemAdapter(category.getItems(), context, itemClickListener);
-        holder.itemsRecyclerView.setAdapter(itemAdapter);
+        // Load image using Glide
+        Glide.with(context)
+                .load(imageUrl)
+                .placeholder(R.drawable.audio)  // Placeholder image
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return imageUrls.size();
     }
 
-    public void updateCategories(List<Category> newCategories) {
-        this.categories = newCategories;
-        notifyDataSetChanged();
-    }
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
 
-    public class CategoryViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryName;
-        RecyclerView itemsRecyclerView;
-
-        public CategoryViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
-            categoryName = itemView.findViewById(R.id.category_name);
-            itemsRecyclerView = itemView.findViewById(R.id.items_recycler_view);
-            itemsRecyclerView.setLayoutManager(new GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false));
+            imageView = itemView.findViewById(R.id.image);
         }
     }
 }

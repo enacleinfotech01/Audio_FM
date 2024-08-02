@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -26,17 +28,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.my.audio_video_fm.R;
-import com.my.audio_video_fm.adapter.CategoryAdapter;
-import com.my.audio_video_fm.model.Category;
-import com.my.audio_video_fm.model.MediaItem;
-import com.my.audio_video_fm.playvideo;
+import com.my.audio_video_fm.adapter.SearchCategoryAdapter;
+import com.my.audio_video_fm.model.SearchCategory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -49,9 +48,9 @@ public class SearchFragment extends Fragment {
     private static final int REQUEST_PERMISSION_CODE = 2000;
 
     private RecyclerView categoriesRecyclerView;
-    private CategoryAdapter categoryAdapter;
-    private List<Category> categories;
-    private List<Category> filteredCategories = new ArrayList<>();
+    private SearchCategoryAdapter searchCategoryAdapter;
+    private List<SearchCategory> searchCategories;
+    private List<SearchCategory> filteredCategories = new ArrayList<>();
     private OkHttpClient client = new OkHttpClient();
     private EditText searchEditText;
     private ImageView speakImageView;
@@ -63,11 +62,15 @@ public class SearchFragment extends Fragment {
         searchEditText = view.findViewById(R.id.editext);
         speakImageView = view.findViewById(R.id.speakuser);
 
-        categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        fetchJsonData("https://api.npoint.io/dbb28723c94bbbc7c5e5");
+        // Initialize adapter here
+        searchCategoryAdapter = new SearchCategoryAdapter(requireContext(), filteredCategories);
+        categoriesRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(),2));
+        categoriesRecyclerView.setAdapter(searchCategoryAdapter);
 
-        searchEditText.addTextChangedListener(new android.text.TextWatcher() {
+        fetchJsonData("https://api.npoint.io/3d04705d56c3d6463fc1");
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -78,7 +81,7 @@ public class SearchFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(android.text.Editable editable) {
+            public void afterTextChanged(Editable editable) {
             }
         });
 
@@ -103,80 +106,63 @@ public class SearchFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
-                Log.e("SearchFragment", "Failed to fetch data", e);
+                Log.e("SearchFragment", "Failed to fetch data: " + e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful() && response.body() != null) {
                     String jsonData = response.body().string();
-                    categories = parseJson(jsonData);
+                    Log.d("SearchFragment", "JSON data received: " + jsonData);
 
-                    requireActivity().runOnUiThread(() -> {
-                        filteredCategories.clear();
-                        filteredCategories.addAll(categories);
-                        categoryAdapter = new CategoryAdapter(filteredCategories, requireContext(), item -> {
-                            Log.d("ItemType", "Item Type: " + item.getType());
+                    try {
+                        searchCategories = parseJson(jsonData);
 
-                            if ("video".equals(item.getType())) {
-                                String videoId = item.getVideoId();
-                                String image = item.getThumbnailUrl();
-                                Log.d("VideoID", "Video ID: " + videoId);
-                                openPlayFragment(videoId, image);
-                            } else {
-                                Toast.makeText(requireContext(), "Not a video item: " + item.getType(), Toast.LENGTH_SHORT).show();
-                            }
+                        requireActivity().runOnUiThread(() -> {
+                            filteredCategories.clear();
+                            filteredCategories.addAll(searchCategories);
+                            searchCategoryAdapter.notifyDataSetChanged();
                         });
-
-                        categoriesRecyclerView.setAdapter(categoryAdapter);
-                    });
+                    } catch (Exception e) {
+                        Log.e("SearchFragment", "Error parsing JSON: " + e.getMessage());
+                    }
                 } else {
-                    Log.e("SearchFragment", "Response not successful");
+                    Log.e("SearchFragment", "Response not successful: " + response.message());
                 }
             }
         });
     }
 
-    private List<Category> parseJson(String jsonData) {
+    private List<SearchCategory> parseJson(String jsonData) {
+        List<SearchCategory> categories = new ArrayList<>();
         Gson gson = new Gson();
-        List<Category> categories = new ArrayList<>();
-
         try {
             JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
-            JsonArray mediaItemsArray = jsonObject.getAsJsonArray("media_items");
+            JsonArray categoryArray = jsonObject.getAsJsonArray("category");
 
-            Map<String, List<MediaItem>> audioCategoryMap = new HashMap<>();
-            Map<String, List<MediaItem>> videoCategoryMap = new HashMap<>();
-
-            for (JsonElement element : mediaItemsArray) {
-                MediaItem item = gson.fromJson(element, MediaItem.class);
-                if ("audio".equals(item.getType())) {
-                    audioCategoryMap.computeIfAbsent(item.getCategory(), k -> new ArrayList<>()).add(item);
-                } else if ("video".equals(item.getType())) {
-                    videoCategoryMap.computeIfAbsent(item.getCategory(), k -> new ArrayList<>()).add(item);
+            for (JsonElement element : categoryArray) {
+                JsonObject categoryObject = element.getAsJsonObject();
+                String name = categoryObject.get("name").getAsString();
+                String imageUrl = categoryObject.get("image").getAsString();
+                JsonArray uhdArray = categoryObject.getAsJsonArray("UHD");
+                List<String> uhdUrls = new ArrayList<>();
+                for (JsonElement uhdElement : uhdArray) {
+                    uhdUrls.add(uhdElement.getAsString());
                 }
+                categories.add(new SearchCategory(name, imageUrl, uhdUrls));
             }
-
-            for (Map.Entry<String, List<MediaItem>> entry : audioCategoryMap.entrySet()) {
-                categories.add(new Category(entry.getKey(), entry.getValue()));
-            }
-
-            for (Map.Entry<String, List<MediaItem>> entry : videoCategoryMap.entrySet()) {
-                categories.add(new Category(entry.getKey(), entry.getValue()));
-            }
-
+        } catch (JsonSyntaxException e) {
+            Log.e("SearchFragment", "JSON syntax error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("SearchFragment", "Failed to parse JSON", e);
+            Log.e("SearchFragment", "Error parsing JSON: " + e.getMessage());
         }
-
         return categories;
     }
 
     private void filterCategories(String query) {
-        if (categories != null && !categories.isEmpty()) {
-            List<Category> filteredList = new ArrayList<>();
-            for (Category category : categories) {
+        if (searchCategories != null && !searchCategories.isEmpty()) {
+            List<SearchCategory> filteredList = new ArrayList<>();
+            for (SearchCategory category : searchCategories) {
                 if (category.getName().toLowerCase().contains(query.toLowerCase())) {
                     filteredList.add(category);
                 }
@@ -184,7 +170,7 @@ public class SearchFragment extends Fragment {
 
             filteredCategories.clear();
             filteredCategories.addAll(filteredList);
-            categoryAdapter.notifyDataSetChanged();
+            searchCategoryAdapter.notifyDataSetChanged();
 
             if (filteredList.isEmpty()) {
                 Toast.makeText(requireContext(), "No results found", Toast.LENGTH_SHORT).show();
@@ -192,13 +178,6 @@ public class SearchFragment extends Fragment {
         } else {
             Toast.makeText(requireContext(), "No categories available to filter", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void openPlayFragment(String videoId, String imageUrl) {
-        Intent intent = new Intent(requireActivity(), playvideo.class);
-        intent.putExtra("VIDEO_ID", videoId);
-        intent.putExtra("IMAGE_URL", imageUrl);
-        startActivity(intent);
     }
 
     private void promptSpeechInput() {

@@ -29,9 +29,9 @@ import com.my.audio_video_fm.LanguageBottomSheetDialog;
 import com.my.audio_video_fm.Profile;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.StoreCoins;
-import com.my.audio_video_fm.adapter.CategoryAdapter;
+import com.my.audio_video_fm.adapter.HomeCategoryAdapter;
 import com.my.audio_video_fm.adapter.ViewPagerAdapter;
-import com.my.audio_video_fm.model.Category;
+import com.my.audio_video_fm.model.HomeCategory;
 import com.my.audio_video_fm.model.MediaItem;
 import com.my.audio_video_fm.playvideo;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
@@ -59,8 +59,8 @@ public class HomeFragment extends Fragment {
     private Runnable runnable;
 
     private RecyclerView categoriesRecyclerView;
-    private CategoryAdapter categoryAdapter;
-    private List<Category> categories;
+    private HomeCategoryAdapter categoryAdapter;
+    private List<HomeCategory> categories;
     private OkHttpClient client = new OkHttpClient();
     private static final String JSON_URL = "https://api.npoint.io/dbb28723c94bbbc7c5e5";
     private List<Integer> imageList;
@@ -195,7 +195,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        categoryAdapter = new CategoryAdapter(categories, requireContext(), item -> {
+        categoryAdapter = new HomeCategoryAdapter(categories, requireContext(), item -> {
             Log.d(TAG, "Item clicked: " + item.getType());
             if ("video".equals(item.getType())) {
                 String videoId = item.getVideoId();
@@ -210,9 +210,9 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "RecyclerView set up with category adapter");
     }
 
-    private List<Category> parseJson(String jsonData) {
+    private List<HomeCategory> parseJson(String jsonData) {
         Gson gson = new Gson();
-        List<Category> categories = new ArrayList<>();
+        List<HomeCategory> categories = new ArrayList<>();
         try {
             JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
             JsonArray mediaItemsArray = jsonObject.getAsJsonArray("media_items");
@@ -231,12 +231,12 @@ public class HomeFragment extends Fragment {
 
             // Add audio categories to the list
             for (Map.Entry<String, List<MediaItem>> entry : audioCategoryMap.entrySet()) {
-                categories.add(new Category(entry.getKey(), entry.getValue()));
+                categories.add(new HomeCategory(entry.getKey(), entry.getValue()));
             }
 
             // Add video categories to the list
             for (Map.Entry<String, List<MediaItem>> entry : videoCategoryMap.entrySet()) {
-                categories.add(new Category(entry.getKey(), entry.getValue()));
+                categories.add(new HomeCategory(entry.getKey(), entry.getValue()));
             }
 
             Log.d(TAG, "JSON parsing completed successfully");

@@ -24,11 +24,9 @@
             android:name=".Fragment_container"
             android:exported="false" />
         <activity
-            android:name=".fragment.EarnCoinsFragment"
+            android:name=".DisplayActivity"
             android:exported="false" />
-        <activity
-            android:name=".fragment.BuyCoinsFragment"
-            android:exported="false" />
+
         <activity
             android:name=".StoreCoins"
             android:exported="false" />
