@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_gravity="right"
+        android:layout_height="@dimen/_25sdp"
+        android:src="@drawable/close_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+
+    <ImageView
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:src="@drawable/right"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:textColor="#4CAF50"
+        android:layout_height="wrap_content"
+        android:text="Verification Successful"
+        android:textStyle="bold"
+
+        android:textSize="@dimen/_15sdp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="@dimen/_15sdp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You get 30 days free Trail with student offer"
+        android:textSize="@dimen/_13sdp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="@dimen/_15sdp"/>
+
+    <Button
+        android:id="@+id/start_button_veryfi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_margin="@dimen/_12sdp"
+        android:backgroundTint="#4CAF50"
+        android:drawableEnd="@drawable/arrow_right_alt_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:gravity="left"
+        android:padding="@dimen/_9sdp"
+        android:text="Start Free Trial"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="we will remind before trail ends Cancel Anytime"
+        android:textSize="@dimen/_11sdp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="@dimen/_4sdp"/>
+</LinearLayout>

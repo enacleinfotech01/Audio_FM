@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
+    android:padding="@dimen/_16sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/bottom_sheet_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:text="Verify student details"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_18sdp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:src="@drawable/close_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:textColor="@color/white"
+        android:background="@drawable/border"
+        android:hint="Enter your name"
+        android:padding="@dimen/_12sdp" />
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:layout_gravity="right"
+        android:src="@drawable/ic_delete"/>
+    <ImageView
+        android:id="@+id/iv_student_id"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:background="@drawable/border"
+        android:src="@drawable/cloud_upload_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#D81A0C"
+        android:layout_marginBottom="@dimen/_9sdp"
+        android:textSize="@dimen/_11sdp"
+        android:id="@+id/warning"/>
+
+    <Button
+        android:id="@+id/btn_verify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:backgroundTint="@color/gray"
+        android:text="Verify"
+        android:textColor="@color/appcolor" />
+
+</LinearLayout>
