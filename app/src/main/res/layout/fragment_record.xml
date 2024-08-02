@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
+    tools:context=".fragment.RecordFragment">
+
+
+
+    <ImageView
+        android:layout_width="@dimen/_280sdp"
+        android:layout_height="@dimen/_220sdp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_10sdp"
+        android:src="@drawable/record" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create and Share"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="@dimen/_15sdp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Setup your personal recording studio and reach out to\n over 2 million users!"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_11sdp" />
+    <TextView
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_9sdp"
+        android:background="@drawable/border"
+        android:drawableLeft="@drawable/radio_button_checked_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:gravity="center"
+        android:padding="@dimen/_9sdp"
+        android:text="Create Episode"
+        android:textColor="#D81A0C"
+        android:textSize="@dimen/_14sdp" />
+
+    <TextView
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_9sdp"
+        android:background="@drawable/btn_border"
+        android:drawableLeft="@drawable/add_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:gravity="center"
+        android:padding="@dimen/_9sdp"
+        android:text="Create Episode"
+        android:textColor="#D81A0C"
+        android:textSize="@dimen/_15sdp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Already own a podcast? Link your RSS feed below"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_11sdp" />
+</LinearLayout>

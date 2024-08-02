@@ -182,12 +182,12 @@ public class PlayFragment extends Fragment {
             episodeList = new ArrayList<>();
         }
 
-        episodeList.add(new EpisodeItem(imageUrl, "Episode 1", "10:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24));
-        episodeList.add(new EpisodeItem(imageUrl, "Episode 2", "12:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24));
-        episodeList.add(new EpisodeItem(imageUrl, "Episode 3", "14:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24));
-        episodeList.add(new EpisodeItem(imageUrl, "Episode 4", "16:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24));
-        episodeList.add(new EpisodeItem(imageUrl, "Episode 5", "18:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24));
-        episodeList.add(new EpisodeItem(imageUrl, "Episode 6", "20:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24));
+        episodeList.add(new EpisodeItem(1,imageUrl, "Episode 1", "10:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
+        episodeList.add(new EpisodeItem(2,imageUrl, "Episode 2", "12:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
+        episodeList.add(new EpisodeItem(3,imageUrl, "Episode 3", "14:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
+        episodeList.add(new EpisodeItem(4,imageUrl, "Episode 4", "16:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
+        episodeList.add(new EpisodeItem(5,imageUrl, "Episode 5", "18:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
+        episodeList.add(new EpisodeItem(6,imageUrl, "Episode 6", "20:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
 
         if (adapter != null) {
             adapter.notifyDataSetChanged();

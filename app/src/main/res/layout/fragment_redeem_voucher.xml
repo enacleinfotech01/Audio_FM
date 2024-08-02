@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
+    tools:context=".fragment.RedeemVoucherFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:src="@drawable/arrow_back_24dp_ff000000_fill0_wght400_grad0_opsz24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingHorizontal="@dimen/_9sdp"
+            android:text="Audio FM"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16sdp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:text="Redeem Voucher"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_20sdp" />
+
+    <TextView
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:text="If you have a Audio FM Voucher code,enter it \nbelow  to claim" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/border">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@color/appcolor"
+            android:hint="Enter Coupon Code"
+            android:padding="@dimen/_5sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:paddingHorizontal="@dimen/_9sdp"
+            android:text="Apply"
+            android:textColor="#D81A0C"
+            android:textSize="@dimen/_15sdp" />
+    </RelativeLayout>
+</LinearLayout>

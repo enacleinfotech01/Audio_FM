@@ -7,7 +7,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.my.audio_video_fm.fragment.AnalyticsFragment;
 import com.my.audio_video_fm.fragment.MyAudioFragment;
-import com.my.audio_video_fm.fragment.RecordFragment;
 
 public class ViewPagerAdapterStudio extends FragmentStateAdapter {
 

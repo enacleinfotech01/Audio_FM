@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
+    tools:context=".fragment.FreeTrailFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/_25sdp"
+            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:src="@drawable/arrow_back_24dp_ff000000_fill0_wght400_grad0_opsz24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingHorizontal="@dimen/_9sdp"
+            android:text="Audio FM"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16sdp" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_9sdp"
+        android:backgroundTint="@color/appcolor"
+        android:elevation="@dimen/_20sdp"
+        app:cardCornerRadius="@dimen/_20sdp"
+        app:cardElevation="@dimen/_20sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_9sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:paddingHorizontal="@dimen/_9sdp"
+                android:src="@drawable/fast_forward_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingHorizontal="@dimen/_9sdp"
+                android:text="UPI"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+android:layout_margin="@dimen/_10sdp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/phonepe" />
+
+            <TextView
+                android:layout_width="@dimen/_210sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:drawableEnd="@drawable/chevron_right_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+                android:text="Phone Pe"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/googlepay" />
+
+            <TextView
+                android:layout_width="@dimen/_210sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:drawableEnd="@drawable/chevron_right_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+                android:text="Google Pay (GPay)"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/upi" />
+
+            <TextView
+                android:layout_width="@dimen/_210sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:drawableEnd="@drawable/chevron_right_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+                android:text="Phone Pe"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_9sdp"
+        android:backgroundTint="@color/appcolor"
+        android:elevation="@dimen/_20sdp"
+        app:cardCornerRadius="@dimen/_20sdp"
+        app:cardElevation="@dimen/_20sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_9sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:paddingHorizontal="@dimen/_9sdp"
+                app:tint="@color/white"
+                android:src="@drawable/playstore" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingHorizontal="@dimen/_9sdp"
+                android:text="Google Play Store"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

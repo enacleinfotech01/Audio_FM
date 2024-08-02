@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/appcolor"
+    tools:context=".fragment.PremimumFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appcolor">
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_30sdp"
+
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:src="@drawable/close_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+    </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:text="Audio_FM"
+                android:textColor="@color/white"
+
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="@dimen/_90sdp"
+                android:layout_height="@dimen/_20sdp"
+
+                android:src="@drawable/premimum"
+              />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="7 Days"
+            
+                android:textColor="@color/white"
+
+                android:textSize="@dimen/_25sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:background="#FFC107"
+                android:gravity="center"
+                android:text="FREE"
+            
+                android:textColor="@color/white"
+                android:textSize="@dimen/_25sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:gravity="center"
+
+                android:text="Trail"
+            
+                android:textColor="@color/white"
+                android:textSize="@dimen/_25sdp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:src="@drawable/rating" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.6"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(7.65 lakhs revies)"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:backgroundTint="@color/appcolor"
+            app:cardCornerRadius="@dimen/_12sdp"
+            android:elevation="@dimen/_12sdp"
+            app:cardElevation="@dimen/_12sdp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+
+      </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/redem"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                android:padding="@dimen/_10sdp"
+                android:text="Redeem Offer"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/radio_button_border_unselected"
+
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_12sdp"
+        android:text="Start Free Trial"
+        android:textSize="@dimen/_15sdp"
+        android:layout_gravity="left"
+        android:padding="@dimen/_9sdp"
+        android:gravity="left"
+        android:drawableEnd="@drawable/arrow_right_alt_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:backgroundTint="#4CAF50"/>
+
+
+</LinearLayout>
