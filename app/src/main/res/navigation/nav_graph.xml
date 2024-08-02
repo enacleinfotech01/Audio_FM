@@ -20,15 +20,10 @@
             android:id="@+id/action_homeFragment_to_mySpaceFragment"
             app:destination="@id/mySpaceFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_audioFragment"
-            app:destination="@id/audioFragment" />
+            android:id="@+id/action_homeFragment_to_premimumFragment"
+            app:destination="@id/premimumFragment" />
 
     </fragment>
-    <fragment
-        android:id="@+id/audioFragment"
-        android:name="com.my.audio_video_fm.fragment.AudioFragment"
-        android:label="fragment_audio"
-        tools:layout="@layout/fragment_audio" />
     <fragment
         android:id="@+id/videoFragment"
         android:name="com.my.audio_video_fm.fragment.VideoFragment"
@@ -45,6 +40,11 @@
         android:name="com.my.audio_video_fm.fragment.MySpaceFragment"
         android:label="fragment_my_space"
         tools:layout="@layout/fragment_my_space" />
+    <fragment
+        android:id="@+id/premimumFragment"
+        android:name="com.my.audio_video_fm.fragment.PremimumFragment"
+        android:label="fragment_premimum"
+        tools:layout="@layout/fragment_premimum" />
 
 
 </navigation>

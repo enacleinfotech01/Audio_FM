@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/appcolor"
     android:orientation="vertical"
-    tools:context=".Studio">
+    tools:context=".activity.Studio">
 
     <LinearLayout
         android:layout_width="match_parent"

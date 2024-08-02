@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/appcolor"
     android:orientation="vertical"
-    tools:context=".StoreCoins">
+    tools:context=".activity.StoreCoins">
 
     <LinearLayout
         android:layout_width="match_parent"

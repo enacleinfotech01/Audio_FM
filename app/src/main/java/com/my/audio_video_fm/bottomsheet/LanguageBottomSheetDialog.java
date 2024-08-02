@@ -1,4 +1,4 @@
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.bottomsheet;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.my.audio_video_fm.R;
 
 public class LanguageBottomSheetDialog extends BottomSheetDialogFragment {
 

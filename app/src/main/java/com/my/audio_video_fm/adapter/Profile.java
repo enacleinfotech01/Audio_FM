@@ -12,7 +12,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.my.audio_video_fm.R;
-import com.my.audio_video_fm.Studio;
+import com.my.audio_video_fm.activity.Studio;
 
 public class Profile extends AppCompatActivity {
     private TabLayout tabLayout;

@@ -9,17 +9,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:background="@drawable/rounded_background"
-        android:layout_margin="@dimen/_5sdp"
+        android:layout_margin="@dimen/_10sdp"
         android:layout_height="wrap_content">
         <EditText
-            android:layout_width="@dimen/_250sdp"
+            android:layout_width="match_parent"
             android:id="@+id/editext"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/_2sdp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/speakuser"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
+            android:padding="2dp"
             android:layout_gravity="center"
             android:src="@drawable/settings_voice_24dp_e8eaed_fill0_wght400_grad0_opsz24"/>
 

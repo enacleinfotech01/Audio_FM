@@ -21,29 +21,29 @@
         android:theme="@style/Theme.Audio_Video_FM"
         tools:targetApi="31">
         <activity
-            android:name=".Fragment_container"
+            android:name=".activity.Fragment_container"
             android:exported="false" />
         <activity
-            android:name=".DisplayActivity"
+            android:name=".activity.DisplayActivity"
             android:exported="false" />
 
         <activity
-            android:name=".StoreCoins"
+            android:name=".activity.StoreCoins"
             android:exported="false" />
         <activity
-            android:name=".Studio"
+            android:name=".activity.Studio"
             android:exported="false" />
         <activity
-            android:name=".Profile"
+            android:name=".activity.Profile"
             android:exported="false" />
         <activity
-            android:name=".Episode"
+            android:name=".activity.Episode"
             android:windowAnimationStyle="@style/ActivityAnimation" />
         <activity
-            android:name=".playvideo"
+            android:name=".activity.playvideo"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="false" />
     </application>
 

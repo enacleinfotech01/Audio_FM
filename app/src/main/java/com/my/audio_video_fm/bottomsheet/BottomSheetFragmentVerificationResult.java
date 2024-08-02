@@ -1,4 +1,4 @@
-    package com.my.audio_video_fm;
+    package com.my.audio_video_fm.bottomsheet;
 
     import android.os.Bundle;
     import android.view.LayoutInflater;
@@ -15,6 +15,7 @@
     import androidx.fragment.app.FragmentTransaction;
 
     import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+    import com.my.audio_video_fm.R;
     import com.my.audio_video_fm.fragment.FreeTrailFragment;
 
     public class BottomSheetFragmentVerificationResult extends BottomSheetDialogFragment {

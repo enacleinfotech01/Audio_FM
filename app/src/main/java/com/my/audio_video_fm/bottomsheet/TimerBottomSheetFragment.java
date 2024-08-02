@@ -1,4 +1,4 @@
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.bottomsheet;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.my.audio_video_fm.dialog.CustomTimerDialogFragment;
+import com.my.audio_video_fm.R;
 
 public class TimerBottomSheetFragment extends BottomSheetDialogFragment {
 

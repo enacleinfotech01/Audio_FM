@@ -31,6 +31,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.adapter.SearchCategoryAdapter;
+import com.my.audio_video_fm.model.CategoryItem;
 import com.my.audio_video_fm.model.SearchCategory;
 
 import java.io.IOException;
@@ -62,10 +63,9 @@ public class SearchFragment extends Fragment {
         searchEditText = view.findViewById(R.id.editext);
         speakImageView = view.findViewById(R.id.speakuser);
 
-
         // Initialize adapter here
         searchCategoryAdapter = new SearchCategoryAdapter(requireContext(), filteredCategories);
-        categoriesRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(),2));
+        categoriesRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         categoriesRecyclerView.setAdapter(searchCategoryAdapter);
 
         fetchJsonData("https://api.npoint.io/3d04705d56c3d6463fc1");
@@ -143,13 +143,16 @@ public class SearchFragment extends Fragment {
             for (JsonElement element : categoryArray) {
                 JsonObject categoryObject = element.getAsJsonObject();
                 String name = categoryObject.get("name").getAsString();
-                String imageUrl = categoryObject.get("image").getAsString();
+                String image = categoryObject.get("image").getAsString();
+
                 JsonArray uhdArray = categoryObject.getAsJsonArray("UHD");
-                List<String> uhdUrls = new ArrayList<>();
+                List<CategoryItem> uhdItems = new ArrayList<>();
                 for (JsonElement uhdElement : uhdArray) {
-                    uhdUrls.add(uhdElement.getAsString());
+                    CategoryItem uhdItem = gson.fromJson(uhdElement, CategoryItem.class);
+                    uhdItems.add(uhdItem);
                 }
-                categories.add(new SearchCategory(name, imageUrl, uhdUrls));
+
+                categories.add(new SearchCategory(name, image, uhdItems));
             }
         } catch (JsonSyntaxException e) {
             Log.e("SearchFragment", "JSON syntax error: " + e.getMessage());

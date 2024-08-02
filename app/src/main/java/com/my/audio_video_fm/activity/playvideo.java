@@ -1,10 +1,11 @@
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.activity;
 
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.fragment.PlayFragment;
 
 public class playvideo extends AppCompatActivity {

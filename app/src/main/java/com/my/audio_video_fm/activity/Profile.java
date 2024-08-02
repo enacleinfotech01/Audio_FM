@@ -1,4 +1,4 @@
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +11,7 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.my.audio_video_fm.adapter.ViewPagerAdapter;
+import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.adapter.ViewPagerAdapterProfile;
 
 public class Profile extends AppCompatActivity {

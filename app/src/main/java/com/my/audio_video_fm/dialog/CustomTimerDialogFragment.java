@@ -1,5 +1,5 @@
 // CustomTimerDialogFragment.java
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.my.audio_video_fm.R;
 
 public class CustomTimerDialogFragment extends DialogFragment {
 

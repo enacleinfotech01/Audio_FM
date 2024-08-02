@@ -13,11 +13,14 @@
         android:textColor="@android:color/white"
         android:text="Category Name"/>
 
-   <androidx.recyclerview.widget.RecyclerView
-       android:id="@+id/category_list"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_below="@+id/category_name_textview"
-       android:layout_margin="@dimen/_5sdp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/category_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/category_name_textview"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_5sdp" />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.activity;
 
 import android.os.Bundle;
 
@@ -7,6 +7,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.my.audio_video_fm.R;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.navigation_home) {
                 navController.navigate(R.id.homeFragment);
             } else if (itemId == R.id.navigation_audio) {
-                navController.navigate(R.id.audioFragment);
+                navController.navigate(R.id.premimumFragment);
             } else if (itemId == R.id.navigation_video) {
                 navController.navigate(R.id.videoFragment);
             } else if (itemId == R.id.navigation_search) {

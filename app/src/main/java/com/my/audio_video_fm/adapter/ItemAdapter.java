@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.model.MediaItem;
 import com.my.audio_video_fm.model.SharedViewModel;
-import com.my.audio_video_fm.playvideo;
+import com.my.audio_video_fm.activity.playvideo;
 
 import java.util.List;
 

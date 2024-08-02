@@ -1,4 +1,4 @@
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.adapter.ViewPagerAdapter;
 import com.my.audio_video_fm.adapter.ViewPagerAdapterStudio;
 

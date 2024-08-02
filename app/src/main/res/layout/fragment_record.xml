@@ -50,7 +50,7 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/_9sdp"
         android:background="@drawable/btn_border"
-        android:drawableLeft="@drawable/add_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:drawableLeft="@drawable/ic_add"
         android:gravity="center"
         android:padding="@dimen/_9sdp"
         android:text="Create Episode"

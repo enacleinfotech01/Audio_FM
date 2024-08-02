@@ -1,8 +1,6 @@
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,12 +10,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,8 +22,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.my.audio_video_fm.R;
+import com.my.audio_video_fm.bottomsheet.TimerBottomSheetFragment;
 import com.my.audio_video_fm.model.EpisodeItem;
-import com.my.audio_video_fm.model.MediaItem;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.my.audio_video_fm.Episode;
+import com.my.audio_video_fm.activity.Episode;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.adapter.EpisodeAdapter;
 import com.my.audio_video_fm.model.EpisodeItem;

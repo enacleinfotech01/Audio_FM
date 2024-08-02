@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.my.audio_video_fm.Episode;
-import com.my.audio_video_fm.Fragment_container;
+import com.my.audio_video_fm.activity.Episode;
+import com.my.audio_video_fm.activity.Fragment_container;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.model.EpisodeItem;
 

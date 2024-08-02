@@ -1,4 +1,4 @@
-package com.my.audio_video_fm;
+package com.my.audio_video_fm.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -7,10 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.my.audio_video_fm.fragment.AudioFragment;
+import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.fragment.PremimumFragment;
-
-import com.my.audio_video_fm.fragment.PlayFragment;
 
 public class Fragment_container extends AppCompatActivity {
 

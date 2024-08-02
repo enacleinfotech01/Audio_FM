@@ -12,11 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.my.audio_video_fm.DisplayActivity;
+import com.my.audio_video_fm.activity.DisplayActivity;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.model.SearchCategory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchCategoryAdapter extends RecyclerView.Adapter<SearchCategoryAdapter.ViewHolder> {
@@ -42,7 +41,7 @@ public class SearchCategoryAdapter extends RecyclerView.Adapter<SearchCategoryAd
         holder.categoryNameTextView.setText(searchCategory.getName());
 
         // Check if image URL is not null and valid
-        String imageUrl = searchCategory.getImageUrl();
+        String imageUrl = searchCategory.getImage();
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(context)
                     .load(imageUrl)
@@ -53,8 +52,9 @@ public class SearchCategoryAdapter extends RecyclerView.Adapter<SearchCategoryAd
         }
 
         holder.imageView.setOnClickListener(v -> {
+            // Create intent and pass the image URLs
             Intent intent = new Intent(context, DisplayActivity.class);
-            intent.putStringArrayListExtra("imageUrls", new ArrayList<>(searchCategory.getUHD()));
+            intent.putExtra("CATEGORY_NAME", searchCategory.getName());
             context.startActivity(intent);
         });
     }

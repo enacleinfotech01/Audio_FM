@@ -4,24 +4,37 @@ import java.util.List;
 
 public class SearchCategory {
     private String name;
-    private String imageUrl;
-    private List<String> UHD;
+    private String image;
+    private List<CategoryItem> UHD;
 
-    public SearchCategory(String name, String imageUrl, List<String> UHD) {
+    public SearchCategory(String name, String image, List<CategoryItem> UHD) {
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.UHD = UHD;
     }
 
+    // Getters and setters
     public String getName() {
         return name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public List<String> getUHD() {
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public List<CategoryItem> getUHD() {
         return UHD;
+    }
+
+    public void setUHD(List<CategoryItem> UHD) {
+        this.UHD = UHD;
     }
 }
