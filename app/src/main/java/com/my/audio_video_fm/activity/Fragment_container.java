@@ -6,6 +6,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.fragment.PremimumFragment;
@@ -54,5 +57,7 @@ public class Fragment_container extends AppCompatActivity {
                 fragmentTransaction.commit();
             }
         }
+
+
     }
 }

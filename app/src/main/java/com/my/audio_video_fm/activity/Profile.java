@@ -7,6 +7,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -19,6 +20,8 @@ public class Profile extends AppCompatActivity {
 
     ExtendedFloatingActionButton studio;
     private ViewPager2 viewPager;
+
+    ImageView setting;
     private ViewPagerAdapterProfile viewPagerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class Profile extends AppCompatActivity {
 studio=findViewById(R.id.studio);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
+        setting=findViewById(R.id.setting);
         viewPagerAdapter = new ViewPagerAdapterProfile(this);
         viewPager.setAdapter(viewPagerAdapter);
 
@@ -35,6 +39,12 @@ studio=findViewById(R.id.studio);
             public void onClick(View v) {
                 Intent intent = new Intent(Profile.this,Studio.class);
                 startActivity(intent);
+            }
+        });
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {

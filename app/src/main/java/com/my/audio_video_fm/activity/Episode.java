@@ -107,7 +107,7 @@ bottomtime=findViewById(R.id.show_dialog_button);
         }
 
         // Initialize music list with EpisodeItem
-        musicList.add(new EpisodeItem(1,imageUrl, title, "3:00", R.raw.music1,R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"music"));
+        musicList.add(new EpisodeItem(1,imageUrl, title, "3:00", R.raw.music1,R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"musivc"));
         musicList.add(new EpisodeItem(2,imageUrl, title, "4:00", R.raw.music2,R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"music"));
         musicList.add(new EpisodeItem(3,imageUrl, title, "2:30", R.raw.music3,R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"music"));
 

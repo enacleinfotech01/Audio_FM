@@ -11,11 +11,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/_15sdp"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
+            android:layout_width="@dimen/_23sdp"
+            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:layout_height="@dimen/_23sdp"
             android:src="@drawable/arrow_back_24dp_ff000000_fill0_wght400_grad0_opsz24" />
 
         <TextView
@@ -24,25 +26,30 @@
             android:layout_gravity="center"
             android:paddingHorizontal="@dimen/_9sdp"
             android:text="Tech"
+            android:layout_weight="1"
             android:textColor="@color/white"
             android:textSize="@dimen/_15sdp" />
 
         <ImageView
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:padding="@dimen/_2sdp"
+            android:layout_marginHorizontal="@dimen/_5sdp"
             android:src="@drawable/notifications_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
 
         <ImageView
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:padding="@dimen/_2sdp"
+            android:layout_marginHorizontal="@dimen/_5sdp"
             android:src="@drawable/edit_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
 
         <ImageView
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:id="@+id/setting"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:padding="@dimen/_2sdp"
+            android:layout_marginHorizontal="@dimen/_5sdp"
             android:src="@drawable/settings_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
     </LinearLayout>
 

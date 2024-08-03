@@ -1,6 +1,7 @@
 package com.my.audio_video_fm.fragment;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,14 +15,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.my.audio_video_fm.activity.Episode;
 import com.my.audio_video_fm.R;
+import com.my.audio_video_fm.activity.Episode;
 import com.my.audio_video_fm.adapter.EpisodeAdapter;
 import com.my.audio_video_fm.model.EpisodeItem;
 
@@ -31,30 +31,20 @@ import java.util.List;
 public class PlayFragment extends Fragment {
 
     private ImageView targetImageView;
-    Button music;
-
-    private ImageView bookmarkImageView;
-
-
-
-
-
-
-
-    // Example index
-
+    private Button musicButton;
     private ImageView playMusicImageView;
-    private boolean isPlaying = false;
-    private Button playPauseButton;
     private TextView textView;
-    private String imageUrl;
-    private CardView cardView;
+    private TextView readMoreView;
     private RecyclerView recyclerView;
     private EpisodeAdapter adapter;
+    private ImageView bookmarkImageView;
     private List<EpisodeItem> episodeList;
-    private TextView readMoreView;
+    private MediaPlayer mediaPlayer;
+    private boolean isPlaying = false;
     private boolean isExpanded = false;
-    private int currentIndex = 0; // Initialize the index
+    private String imageUrl;
+    private ImageView image;
+    private int currentIndex = 0;
 
     public static PlayFragment newInstance(String videoId, String imageUrl) {
         PlayFragment fragment = new PlayFragment();
@@ -66,8 +56,7 @@ public class PlayFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_play, container, false);
     }
 
@@ -76,23 +65,18 @@ public class PlayFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         playMusicImageView = view.findViewById(R.id.playmusic);
+        musicButton = view.findViewById(R.id.music);
         textView = view.findViewById(R.id.text);
         readMoreView = view.findViewById(R.id.read_more);
-        playPauseButton = view.findViewById(R.id.music);
-        cardView = view.findViewById(R.id.cardview);
+        image = view.findViewById(R.id.image);
         targetImageView = view.findViewById(R.id.image);
         bookmarkImageView = view.findViewById(R.id.bookmark);
-        playPauseButton = view.findViewById(R.id.music);
+        recyclerView = view.findViewById(R.id.episodes_recycler_view);
 
-        playPauseButton.setOnClickListener(v -> togglePlayPause());
-        // Set an initial state
-        textView.setMaxLines(3); // Set initial maximum lines
-        textView.setEllipsize(TextUtils.TruncateAt.END); // Show ellipsis when text is too long
+        textView.setMaxLines(3);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
 
         readMoreView.setOnClickListener(v -> toggleText());
-        bookmarkImageView = view.findViewById(R.id.bookmark);
-
-
 
         if (getArguments() != null) {
             String videoId = getArguments().getString("video_id");
@@ -108,33 +92,31 @@ public class PlayFragment extends Fragment {
             Toast.makeText(getContext(), "No arguments provided", Toast.LENGTH_SHORT).show();
         }
 
-        recyclerView = view.findViewById(R.id.episodes_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new EpisodeAdapter(episodeList,requireActivity());
+        adapter = new EpisodeAdapter(episodeList, requireActivity());
         recyclerView.setAdapter(adapter);
 
-        playPauseButton.setOnClickListener(v -> togglePlayPause());
+        playMusicImageView.setOnClickListener(v -> togglePlayback());
+        musicButton.setOnClickListener(v -> togglePlayback());
 
-        cardView.setOnClickListener(v -> {
+        image.setOnClickListener(v -> {
             if (episodeList != null && !episodeList.isEmpty()) {
-                EpisodeItem selectedEpisode = episodeList.get(currentIndex);
-                Intent intent = new Intent(getActivity(), Episode.class);
-                intent.putExtra("image_url", selectedEpisode.getImageUrl());
-                intent.putExtra("title", selectedEpisode.getTitle());
-                startActivity(intent);
+                if (!isPlaying) {  // Check if the audio is paused
+                    EpisodeItem selectedEpisode = episodeList.get(currentIndex);
+                    Intent intent = new Intent(getActivity(), Episode.class);
+                    intent.putExtra("image_url", selectedEpisode.getImageUrl());
+                    intent.putExtra("title", selectedEpisode.getTitle());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "Pause the audio first", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(getContext(), "No episodes available", Toast.LENGTH_SHORT).show();
             }
         });
 
-
-
-
-
-        bookmarkImageView.setImageResource(R.drawable.bookmarks_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with a default icon if necessary
-
+        bookmarkImageView.setImageResource(R.drawable.bookmarks_24dp_e8eaed_fill0_wght400_grad0_opsz24);
     }
-
 
     private void displayThumbnail(String thumbnailUrl) {
         Log.d("PlayFragment", "Image URL: " + thumbnailUrl);
@@ -147,21 +129,55 @@ public class PlayFragment extends Fragment {
 
     private void togglePlayback() {
         if (isPlaying) {
-            playMusicImageView.setImageResource(R.drawable.play);
             pausePlayback();
         } else {
-            playMusicImageView.setImageResource(R.drawable.pause);
             startPlayback();
         }
         isPlaying = !isPlaying;
     }
 
+    private void initializeMediaPlayer() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(getActivity(), R.raw.music1); // Replace with your actual audio file
+            mediaPlayer.setOnCompletionListener(mp -> {
+                isPlaying = false;
+                updateUI(false);
+            });
+        }
+    }
+
     private void startPlayback() {
-        // Implement the logic to start playback
+        initializeMediaPlayer();
+        if (!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+            updateUI(true);
+        }
     }
 
     private void pausePlayback() {
-        // Implement the logic to pause playback
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            updateUI(false);
+
+            // Check if there are episodes available before starting the activity
+            if (episodeList != null && !episodeList.isEmpty()) {
+                EpisodeItem selectedEpisode = episodeList.get(currentIndex);
+                Intent intent = new Intent(getActivity(), Episode.class);
+                intent.putExtra("image_url", selectedEpisode.getImageUrl());
+                intent.putExtra("title", selectedEpisode.getTitle());
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), "No episodes available", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    private void updateUI(boolean isPlaying) {
+        int playPauseIcon = isPlaying ? R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24 : R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24;
+        playMusicImageView.setImageResource(playPauseIcon);
+        musicButton.setText(isPlaying ? "Pause Episode 1" : "Resume Episode 1");
+        musicButton.setCompoundDrawablesWithIntrinsicBounds(playPauseIcon, 0, 0, 0);
     }
 
     private void toggleText() {
@@ -182,38 +198,15 @@ public class PlayFragment extends Fragment {
             episodeList = new ArrayList<>();
         }
 
-        episodeList.add(new EpisodeItem(1,imageUrl, "Episode 1", "10:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
-        episodeList.add(new EpisodeItem(2,imageUrl, "Episode 2", "12:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
-        episodeList.add(new EpisodeItem(3,imageUrl, "Episode 3", "14:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
-        episodeList.add(new EpisodeItem(4,imageUrl, "Episode 4", "16:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
-        episodeList.add(new EpisodeItem(5,imageUrl, "Episode 5", "18:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
-        episodeList.add(new EpisodeItem(6,imageUrl, "Episode 6", "20:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"Try Premium for free"));
+        episodeList.add(new EpisodeItem(1, imageUrl, "Episode 1", "10:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "Try Premium for free"));
+        episodeList.add(new EpisodeItem(2, imageUrl, "Episode 2", "12:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "Try Premium for free"));
+        episodeList.add(new EpisodeItem(3, imageUrl, "Episode 3", "14:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "Try Premium for free"));
+        episodeList.add(new EpisodeItem(4, imageUrl, "Episode 4", "16:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "Try Premium for free"));
+        episodeList.add(new EpisodeItem(5, imageUrl, "Episode 5", "18:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "Try Premium for free"));
+        episodeList.add(new EpisodeItem(6, imageUrl, "Episode 6", "20:00", R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.lock_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "Try Premium for free"));
 
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
     }
-
-    private void togglePlayPause() {
-        if (isPlaying) {
-            // Update to play icon and text
-            playPauseButton.setText("Resume Episode 1");
-            playPauseButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24, 0, 0, 0);
-            // Pause playback
-            pausePlayback();
-        } else {
-            // Update to pause icon and text
-            playPauseButton.setText("Pause Episode 1");
-            playPauseButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24, 0, 0, 0);
-            // Start playback
-            startPlayback();
-        }
-        isPlaying = !isPlaying; // Toggle playback state
-    }
-
-
-
-
-
-
 }
