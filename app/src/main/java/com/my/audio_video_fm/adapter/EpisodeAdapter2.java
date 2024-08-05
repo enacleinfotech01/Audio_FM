@@ -57,6 +57,7 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
                     Intent intent = new Intent(context, EpisodeActivity.class);
                     intent.putExtra("IMAGE_URL", episode.getImageUrl2());
                     intent.putExtra("title", episode.getTitle2());
+                    intent.putExtra("AUDIO_URL",episode.getAudioUrl());
                     context.startActivity(intent);
                 }else {
                     Intent intent = new Intent(context, Fragment_container.class);

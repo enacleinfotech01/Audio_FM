@@ -26,6 +26,7 @@ import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.bottomsheet.TimerBottomSheetFragment;
 import com.my.audio_video_fm.model.EpisodeItem;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
     private List<EpisodeItem> musicList = new ArrayList<>();
     private int currentIndex = 0;
     TextView bottomtime;
+    private String audioPath;
     private static final String TAG = "Episode";
 
     @SuppressLint("MissingInflatedId")
@@ -80,6 +82,21 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         String imageUrl = getIntent().getStringExtra("IMAGE_URL");
         String imageUrl1 = getIntent().getStringExtra("image_url");
         String title = getIntent().getStringExtra("title");
+        String audioUrl = getIntent().getStringExtra("AUDIO_URL");
+
+
+        if (audioPath != null) {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(audioPath);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         findViewById(R.id.show_dialog_button).setOnClickListener(v -> {
             TimerBottomSheetFragment bottomSheet = new TimerBottomSheetFragment();
             bottomSheet.setTimerSelectionListener(this);

@@ -6,16 +6,16 @@ import java.util.List;
 
 public class ApiService {
     public static class ApiResponse {
-        private List<CategoryItem> UHD;
+        private List<CategoryItem> categoryItem;
         private String name;
         private String image;
 
-        public List<CategoryItem> getUHD() {
-            return UHD;
+        public List<CategoryItem> getcategoryItem() {
+            return categoryItem;
         }
 
-        public void setUHD(List<CategoryItem> UHD) {
-            this.UHD = UHD;
+        public void setcategoryItem(List<CategoryItem> categoryItem) {
+            this.categoryItem = categoryItem;
         }
 
         public String getName() {

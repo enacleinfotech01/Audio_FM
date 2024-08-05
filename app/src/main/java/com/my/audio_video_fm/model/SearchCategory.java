@@ -5,12 +5,12 @@ import java.util.List;
 public class SearchCategory {
     private String name;
     private String image;
-    private List<CategoryItem> uhdItems;
+    private List<CategoryItem> categoryItemItems;
 
-    public SearchCategory(String name, String image, List<CategoryItem> uhdItems) {
+    public SearchCategory(String name, String image, List<CategoryItem> categoryItemItems) {
         this.name = name;
         this.image = image;
-        this.uhdItems = uhdItems;
+        this.categoryItemItems = categoryItemItems;
     }
 
     public String getName() {
@@ -21,7 +21,7 @@ public class SearchCategory {
         return image;
     }
 
-    public List<CategoryItem> getUhdItems() {
-        return uhdItems;
+    public List<CategoryItem> getcategoryItemItems() {
+        return categoryItemItems;
     }
 }

@@ -49,6 +49,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.itemView.setOnClickListener(v -> {
             // Create an Intent to start the PlayActivity
             Intent intent = new Intent(context, playvideo.class);
+            intent.putExtra("CATEGORY_IMAGE_URL", categoryItem.getImageUrl()); // Pass the image URL
             intent.putExtra("CATEGORY_NAME", categoryItem.getTitle());
             intent.putExtra("VIDEO_ID", "your_video_id_here");
             intent.putExtra("IMAGE_URL", "your_image_url_here");

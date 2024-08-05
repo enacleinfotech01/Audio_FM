@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -48,6 +49,7 @@ import okhttp3.Response;
 public class PlayFragment extends Fragment {
 
     private ImageView targetImageView, playMusicImageView, imageView;
+    private CircleImageView cirleimage;
     private Button musicButton;
     private TextView textView, readMoreView;
     private CardView cardView;
@@ -89,6 +91,7 @@ public class PlayFragment extends Fragment {
         imageView = view.findViewById(R.id.image);
         readMoreView = view.findViewById(R.id.read_more);
         cardView = view.findViewById(R.id.cardview);
+        cirleimage = view.findViewById(R.id.cirleimage);
 
         // Check arguments and set data
         if (getArguments() != null) {
@@ -101,16 +104,34 @@ public class PlayFragment extends Fragment {
             } else {
                 Log.e(TAG, "TextView with ID 'category_name_textview' is null");
             }
-            // Set category image
-            if (categoryImageUrl != null && !categoryImageUrl.isEmpty()) {
-                // Use Glide or another image loading library to load the image
-                Glide.with(this)
-                        .load(categoryImageUrl)
-                        .placeholder(R.drawable.audio) // Replace with your placeholder image
-                        .error(R.drawable.ic_audiotrack) // Replace with your error image
-                        .into(targetImageView);
+            //set cirleimage
+            if (cirleimage != null) {
+                if (categoryImageUrl != null && !categoryImageUrl.isEmpty()) {
+                    Glide.with(this)
+                            .load(categoryImageUrl)
+                            .placeholder(R.drawable.audio) // Replace with your placeholder image
+                            .error(R.drawable.ic_audiotrack) // Replace with your error image
+                            .into(cirleimage);
+                } else {
+                    Log.e(TAG, "Category image URL is null or empty");
+                }
             } else {
-                Log.e(TAG, "Category image URL is null or empty");
+                Log.e(TAG, "ImageView with ID 'target_image_view' is null");
+            }
+            // Set category image
+            if (imageView != null) {
+                if (categoryImageUrl != null && !categoryImageUrl.isEmpty()) {
+                    Glide.with(this)
+                            .load(categoryImageUrl)
+                            .placeholder(R.drawable.audio) // Replace with your placeholder image
+                            .error(R.drawable.ic_audiotrack) // Replace with your error image
+                            .into(imageView);
+                } else {
+                    Log.e(TAG, "Category image URL is null or empty");
+
+                }
+            } else {
+                Log.e(TAG, "ImageView with ID 'target_image_view' is null");
             }
             episodes = new ArrayList<>();
             fetchJsonData(API_URL);
@@ -135,8 +156,9 @@ public class PlayFragment extends Fragment {
                     // Example to use first episode, adjust as needed
                     Episode2 selectedEpisode = episodes.get(0);
                     Intent intent = new Intent(getActivity(), EpisodeActivity.class);
-                    intent.putExtra("image_url", selectedEpisode.getImageUrl2());
-                    intent.putExtra("title", selectedEpisode.getTitle2());
+                    intent.putExtra("IMAGE_URL", selectedEpisode.getImageUrl2()); // Ensure these keys match your data
+                    intent.putExtra("TITLE", selectedEpisode.getTitle2());
+                    intent.putExtra("AUDIO_URL", selectedEpisode.getAudioUrl()); // Pass the audio URL
                     startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "Pause the playback first", Toast.LENGTH_SHORT).show();
@@ -146,7 +168,7 @@ public class PlayFragment extends Fragment {
             }
         });
 
-    //    playPauseButton.setOnClickListener(v -> togglePlayPause());
+        //    playPauseButton.setOnClickListener(v -> togglePlayPause());
         textView.setMaxLines(3);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         readMoreView.setOnClickListener(v -> toggleText());
@@ -183,32 +205,38 @@ public class PlayFragment extends Fragment {
 
             for (JsonElement categoryElement : categoryArray) {
                 JsonObject categoryObject = categoryElement.getAsJsonObject();
-                JsonArray uhdArray = categoryObject.getAsJsonArray("UHD");
+                JsonArray categoryItemArray = categoryObject.getAsJsonArray("categoryItem");
 
-                for (JsonElement uhdElement : uhdArray) {
-                    JsonObject uhdObject = uhdElement.getAsJsonObject();
+                for (JsonElement categoryItemElement : categoryItemArray) {
+                    JsonObject categoryItemObject = categoryItemElement.getAsJsonObject();
 
-                    if (uhdObject.has("episodes")) {
-                        JsonArray episodesArray = uhdObject.getAsJsonArray("episodes");
-                        for (JsonElement episodeElement : episodesArray) {
-                            JsonObject episodeObject = episodeElement.getAsJsonObject();
-                            int episodeId = episodeObject.get("id").getAsInt();
-                            String episodeTitle = episodeObject.get("title").getAsString();
-                            String episodeTime = episodeObject.get("time").getAsString();
-                            String episodeImageUrl = episodeObject.get("imageUrl").getAsString();
+                    // Check if the categoryItem name matches the provided categoryItemName
+                    String currentcategoryItemName = categoryItemObject.get("title").getAsString();
+                    if (currentcategoryItemName.equals(selectedCategoryName)) {
+                        if (categoryItemObject.has("episodes")) {
+                            JsonArray episodesArray = categoryItemObject.getAsJsonArray("episodes");
+                            for (JsonElement episodeElement : episodesArray) {
+                                JsonObject episodeObject = episodeElement.getAsJsonObject();
+                                int episodeId = episodeObject.get("id").getAsInt();
+                                String episodeTitle = episodeObject.get("title").getAsString();
+                                String episodeTime = episodeObject.get("time").getAsString();
+                                String episodeImageUrl = episodeObject.get("imageUrl").getAsString();
+                                String episodeAudioUrl = episodeObject.has("audioUrl") ? episodeObject.get("audioUrl").getAsString() : null;
 
-                            Episode2 episode = new Episode2(episodeId, episodeTitle, episodeTime, episodeImageUrl);
-                            episodes.add(episode);
+                                Episode2 episode = new Episode2(episodeId, episodeTitle, episodeTime, episodeImageUrl, episodeAudioUrl);
+                                episodes.add(episode);
+                            }
                         }
                     }
                 }
             }
 
-            Log.d(TAG, "JSON parsing completed successfully");
         } catch (Exception e) {
             Log.e(TAG, "Error parsing JSON data", e);
         }
     }
+
+
 
     private void displayThumbnail(String thumbnailUrl) {
         Log.d("PlayFragment", "Image URL: " + thumbnailUrl);

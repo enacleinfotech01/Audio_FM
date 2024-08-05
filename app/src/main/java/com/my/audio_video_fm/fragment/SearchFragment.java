@@ -145,14 +145,14 @@ public class SearchFragment extends Fragment {
                 String name = categoryObject.get("name").getAsString();
                 String image = categoryObject.get("image").getAsString();
 
-                JsonArray uhdArray = categoryObject.getAsJsonArray("UHD");
-                List<CategoryItem> uhdItems = new ArrayList<>();
-                for (JsonElement uhdElement : uhdArray) {
-                    CategoryItem uhdItem = gson.fromJson(uhdElement, CategoryItem.class);
-                    uhdItems.add(uhdItem);
+                JsonArray categoryItemArray = categoryObject.getAsJsonArray("categoryItem");
+                List<CategoryItem> categoryItemItems = new ArrayList<>();
+                for (JsonElement categoryItemElement : categoryItemArray) {
+                    CategoryItem categoryItemItem = gson.fromJson(categoryItemElement, CategoryItem.class);
+                    categoryItemItems.add(categoryItemItem);
                 }
 
-                categories.add(new SearchCategory(name, image, uhdItems));
+                categories.add(new SearchCategory(name, image, categoryItemItems));
             }
         } catch (JsonSyntaxException e) {
             Log.e("SearchFragment", "JSON syntax error: " + e.getMessage());

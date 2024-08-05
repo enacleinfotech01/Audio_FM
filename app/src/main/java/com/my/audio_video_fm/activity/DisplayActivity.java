@@ -86,27 +86,28 @@ public class DisplayActivity extends AppCompatActivity {
             for (JsonElement categoryElement : categoryArray) {
                 JsonObject categoryObject = categoryElement.getAsJsonObject();
                 String name = categoryObject.get("name").getAsString();
-                JsonArray uhdArray = categoryObject.getAsJsonArray("UHD");
+                JsonArray categoryItemArray = categoryObject.getAsJsonArray("categoryItem");
 
                 if (name.equals(selectedCategoryName)) {
-                    for (JsonElement uhdElement : uhdArray) {
-                        JsonObject uhdObject = uhdElement.getAsJsonObject();
-                        int id = uhdObject.get("id").getAsInt();
-                        String title = uhdObject.get("title").getAsString();
-                        String imageUrl = uhdObject.get("imageUrl").getAsString();
-                        String description = uhdObject.has("description") ? uhdObject.get("description").getAsString() : "";
+                    for (JsonElement categoryItemElement : categoryItemArray) {
+                        JsonObject categoryItemObject = categoryItemElement.getAsJsonObject();
+                        int id = categoryItemObject.get("id").getAsInt();
+                        String title = categoryItemObject.get("title").getAsString();
+                        String imageUrl = categoryItemObject.get("imageUrl").getAsString();
+                        String description = categoryItemObject.has("description") ? categoryItemObject.get("description").getAsString() : "";
 
                         List<Episode2> episodes = new ArrayList<>();
-                        if (uhdObject.has("episodes")) {
-                            JsonArray episodesArray = uhdObject.getAsJsonArray("episodes");
+                        if (categoryItemObject.has("episodes")) {
+                            JsonArray episodesArray = categoryItemObject.getAsJsonArray("episodes");
                             for (JsonElement episodeElement : episodesArray) {
                                 JsonObject episodeObject = episodeElement.getAsJsonObject();
                                 int episodeId = episodeObject.get("id").getAsInt();
                                 String episodeTitle = episodeObject.get("title").getAsString();
                                 String episodeTime = episodeObject.get("time").getAsString();
                                 String episodeImageUrl = episodeObject.get("imageUrl").getAsString();
+                                String episodeAudioUrl = episodeObject.has("audioUrl") ? episodeObject.get("audioUrl").getAsString() : null;
 
-                                Episode2 episode = new Episode2(episodeId, episodeTitle, episodeTime, episodeImageUrl);
+                                Episode2 episode = new Episode2(episodeId, episodeTitle, episodeTime, episodeImageUrl, episodeAudioUrl);
                                 episodes.add(episode);
                             }
                         }

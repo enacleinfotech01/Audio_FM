@@ -62,7 +62,7 @@ public class SearchCategoryAdapter extends RecyclerView.Adapter<SearchCategoryAd
 
             // Pass CategoryItems as a JSON string
             Gson gson = new Gson();
-            String jsonCategoryItems = gson.toJson(searchCategory.getUhdItems());
+            String jsonCategoryItems = gson.toJson(searchCategory.getcategoryItemItems());
             intent.putExtra("CATEGORY_ITEMS", jsonCategoryItems);
         });
     }
