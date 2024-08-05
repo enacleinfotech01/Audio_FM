@@ -22,6 +22,7 @@
             android:src="@drawable/arrow_back_24dp_ff000000_fill0_wght400_grad0_opsz24" />
 
         <TextView
+            android:id="@+id/category_name_textview"
             android:layout_width="@dimen/_240sdp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

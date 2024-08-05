@@ -1,6 +1,7 @@
 package com.my.audio_video_fm.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class MediaItem implements Serializable {
     private int id;
@@ -9,6 +10,15 @@ public class MediaItem implements Serializable {
     private String title;
     private String thumbnailUrl;
     private String videoId;
+    private List<Episode2> episodes2;// Add fields according to your JSON structure
+
+    public List<Episode2> getEpisodes2() {
+        return episodes2;
+    }
+
+    public void setEpisodes2(List<Episode2> episodes2) {
+        this.episodes2 = episodes2;
+    }
 
     public int getId() {
         return id;

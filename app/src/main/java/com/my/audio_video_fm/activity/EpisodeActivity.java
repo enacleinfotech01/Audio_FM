@@ -28,9 +28,10 @@ import com.my.audio_video_fm.model.EpisodeItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.Manifest;
 
-public class Episode extends AppCompatActivity implements TimerBottomSheetFragment.TimerSelectionListener {
+public class EpisodeActivity extends AppCompatActivity implements TimerBottomSheetFragment.TimerSelectionListener {
     private ImageView targetImageView, playMusic, forward10Sec, replay10Sec, nextMusic, beforeMusic;
     private MediaPlayer mediaPlayer;
     private SeekBar musicSeekBar;
@@ -56,7 +57,7 @@ public class Episode extends AppCompatActivity implements TimerBottomSheetFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_episode);
-bottomtime=findViewById(R.id.show_dialog_button);
+        bottomtime = findViewById(R.id.show_dialog_button);
         targetImageView = findViewById(R.id.imageView);
         playMusic = findViewById(R.id.playmusic);
         musictext = findViewById(R.id.musicTitle);
@@ -107,9 +108,9 @@ bottomtime=findViewById(R.id.show_dialog_button);
         }
 
         // Initialize music list with EpisodeItem
-        musicList.add(new EpisodeItem(1,imageUrl, title, "3:00", R.raw.music1,R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"musivc"));
-        musicList.add(new EpisodeItem(2,imageUrl, title, "4:00", R.raw.music2,R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"music"));
-        musicList.add(new EpisodeItem(3,imageUrl, title, "2:30", R.raw.music3,R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24,R.drawable.daimond,"music"));
+        musicList.add(new EpisodeItem(1, imageUrl, title, "3:00", R.raw.music1, R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "musivc"));
+        musicList.add(new EpisodeItem(2, imageUrl, title, "4:00", R.raw.music2, R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "music"));
+        musicList.add(new EpisodeItem(3, imageUrl, title, "2:30", R.raw.music3, R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "music"));
 
         if (!musicList.isEmpty()) {
             initializeMediaPlayer(musicList.get(currentIndex));
@@ -264,6 +265,7 @@ bottomtime=findViewById(R.id.show_dialog_button);
             }
         }
     }
+
     private void forward10Seconds() {
         if (mediaPlayer != null) {
             int currentPosition = mediaPlayer.getCurrentPosition();
@@ -347,13 +349,14 @@ bottomtime=findViewById(R.id.show_dialog_button);
         }
         handler.removeCallbacks(updateRunnable);
     }
+
     @Override
     public void onTimerSelected(String timerOption) {
         bottomtime.setText(timerOption);
         Log.d("Episode", "Timer set for: " + timerOption);
 
         if ("Time Off".equals(timerOption)) {
-             // Immediately stop the music
+            // Immediately stop the music
             cancelCountDownTimer(); // Cancel the countdown timer if it is running
             return; // Exit early as no countdown timer is needed
         }
@@ -383,7 +386,6 @@ bottomtime=findViewById(R.id.show_dialog_button);
     }
 
 
-
     private long getRemainingTimeForShow() {
         if (mediaPlayer != null) {
             int currentPosition = mediaPlayer.getCurrentPosition(); // Current position in milliseconds
@@ -392,6 +394,7 @@ bottomtime=findViewById(R.id.show_dialog_button);
         }
         return 0; // Placeholder value
     }
+
     private void startCountDownTimert(long durationInMillis) {
         if (countDownTimer != null) {
             countDownTimer.cancel();
@@ -443,6 +446,7 @@ bottomtime=findViewById(R.id.show_dialog_button);
         long durationInMillis = (hours * 3600 + minutes * 60) * 1000;
         startCountDownTimer(durationInMillis);
     }
+
     private void startCountDownTimer(long durationInMillis) {
         if (countDownTimer != null) {
             countDownTimer.cancel();
@@ -474,9 +478,10 @@ bottomtime=findViewById(R.id.show_dialog_button);
         if (mediaPlayer != null) {
             mediaPlayer.pause();
             isPlaying = false;
-                       handler.removeCallbacks(updateRunnable);
+            handler.removeCallbacks(updateRunnable);
         }
     }
+
     @Override
     public void finish() {
         super.finish();

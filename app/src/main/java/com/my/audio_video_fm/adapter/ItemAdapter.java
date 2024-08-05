@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.model.MediaItem;
 import com.my.audio_video_fm.model.SharedViewModel;
@@ -55,10 +56,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MediaItemViewH
                 .error(R.drawable.ic_audiotrack)
                 .into(holder.thumbnailImageView);
         holder.itemView.setOnClickListener(v -> {
+            // Create an Intent to start the PlayActivity
             Intent intent = new Intent(context, playvideo.class);
-            intent.putExtra("VIDEO_ID", item.getVideoId());
-            intent.putExtra("IMAGE_URL", item.getThumbnailUrl());
+            intent.putExtra("CATEGORY_NAME", item.getTitle());
+            intent.putExtra("VIDEO_ID", "your_video_id_here");
+            intent.putExtra("IMAGE_URL", "your_image_url_here");
+            Gson gson = new Gson();
+            String jsonCategoryItems = gson.toJson(item.getEpisodes2());
+            intent.putExtra("CATEGORY_ITEM", jsonCategoryItems);
             context.startActivity(intent);
+
         });
     }
 

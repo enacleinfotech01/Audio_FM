@@ -249,7 +249,7 @@ public class HomeFragment extends Fragment {
     private void openPlayFragment(String videoId, String imageUrl) {
         Intent intent = new Intent(requireActivity(), playvideo.class);
         intent.putExtra("VIDEO_ID", videoId);
-        intent.putExtra("IMAGE_URL", imageUrl);
+        intent.putExtra("imageUrl", imageUrl);
         startActivity(intent);
         Log.d(TAG, "Opening play fragment for video ID: " + videoId);
     }

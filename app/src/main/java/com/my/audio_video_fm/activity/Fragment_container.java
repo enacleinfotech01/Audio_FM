@@ -29,7 +29,7 @@ public class Fragment_container extends AppCompatActivity {
 
             if (id == 1) {
                 // Start a new activity for ID 1
-                Intent newIntent = new Intent(this, Episode.class);
+                Intent newIntent = new Intent(this, EpisodeActivity.class);
                 newIntent.putExtra("image_url", imageUrl);
                 newIntent.putExtra("title", title);
                 startActivity(newIntent);
