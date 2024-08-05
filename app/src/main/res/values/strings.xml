@@ -14,4 +14,10 @@ Create a drawable resource (rounded_background.xml) with rounded corners and a g
 Set this drawable as the background for your ImageView in the layout XML.
 Ensure all drawable resources used in the ImageView (like play/pause icons) are available.
 If you need further adjustments or have specific questions, feel free to ask!</string>
+    <string-array name="legal_policies_array">
+        <item>Terms and Conditions</item>
+        <item>Privacy Policy</item>
+        <item>Cancellation and Refund Policy</item>
+        <item>Report Abuse (DMCA)</item>
+    </string-array>
 </resources>

@@ -1,13 +1,14 @@
 package com.my.audio_video_fm.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.view.View;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -23,30 +24,33 @@ public class Profile extends AppCompatActivity {
 
     ImageView setting;
     private ViewPagerAdapterProfile viewPagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-studio=findViewById(R.id.studio);
+        studio = findViewById(R.id.studio);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
-        setting=findViewById(R.id.setting);
+        setting = findViewById(R.id.setting);
         viewPagerAdapter = new ViewPagerAdapterProfile(this);
         viewPager.setAdapter(viewPagerAdapter);
 
         studio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Profile.this,Studio.class);
+                Intent intent = new Intent(Profile.this, Studio.class);
                 startActivity(intent);
             }
         });
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(Profile.this, activirty_setting.class); // Use the correct class name
+                startActivity(intent);
             }
         });
+
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

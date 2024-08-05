@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_terms_conditions"
+        android:title="Terms and Conditions" />
+    <item android:id="@+id/menu_privacy_policy"
+        android:title="Privacy Policy" />
+    <item android:id="@+id/menu_cancellation_refund"
+        android:title="Cancellation and Refund Policy" />
+    <item android:id="@+id/menu_report_abuse"
+        android:title="Report Abuse (DMCA)" />
+</menu>
