@@ -38,7 +38,7 @@
             android:name=".activity.Profile"
             android:exported="false" />
         <activity
-            android:name=".activity.Episode"
+            android:name=".activity.EpisodeActivity"
             android:windowAnimationStyle="@style/ActivityAnimation" />
         <activity
             android:name=".activity.playvideo"

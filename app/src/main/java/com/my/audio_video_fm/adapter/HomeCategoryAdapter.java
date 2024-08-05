@@ -20,7 +20,8 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
     private Context context;
     private ItemAdapter.OnItemClickListener itemClickListener;
 
-    public HomeCategoryAdapter(List<HomeCategory> categories, Context context, ItemAdapter.OnItemClickListener itemClickListener) {
+    public
+    HomeCategoryAdapter(List<HomeCategory> categories, Context context, ItemAdapter.OnItemClickListener itemClickListener) {
         this.categories = categories;
         this.context = context;
         this.itemClickListener = itemClickListener;

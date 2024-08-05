@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.my.audio_video_fm.activity.DisplayActivity;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.model.SearchCategory;
@@ -55,7 +56,14 @@ public class SearchCategoryAdapter extends RecyclerView.Adapter<SearchCategoryAd
             // Create intent and pass the image URLs
             Intent intent = new Intent(context, DisplayActivity.class);
             intent.putExtra("CATEGORY_NAME", searchCategory.getName());
+            intent.putExtra("CATEGORY_IMAGE_URL", imageUrl); // Pass the image URL
+
             context.startActivity(intent);
+
+            // Pass CategoryItems as a JSON string
+            Gson gson = new Gson();
+            String jsonCategoryItems = gson.toJson(searchCategory.getcategoryItemItems());
+            intent.putExtra("CATEGORY_ITEMS", jsonCategoryItems);
         });
     }
 
