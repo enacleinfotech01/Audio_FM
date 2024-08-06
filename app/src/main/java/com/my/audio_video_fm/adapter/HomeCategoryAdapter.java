@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.model.HomeCategory;
+import com.my.audio_video_fm.model.CategoryItem;
 
 import java.util.List;
 
@@ -20,8 +21,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
     private Context context;
     private ItemAdapter.OnItemClickListener itemClickListener;
 
-    public
-    HomeCategoryAdapter(List<HomeCategory> categories, Context context, ItemAdapter.OnItemClickListener itemClickListener) {
+    public HomeCategoryAdapter(List<HomeCategory> categories, Context context, ItemAdapter.OnItemClickListener itemClickListener) {
         this.categories = categories;
         this.context = context;
         this.itemClickListener = itemClickListener;
@@ -39,7 +39,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
         HomeCategory category = categories.get(position);
         holder.categoryName.setText(category.getName());
 
-        ItemAdapter itemAdapter = new ItemAdapter(category.getItems(), context, itemClickListener);
+        ItemAdapter itemAdapter = new ItemAdapter(category.getCategoryItem(), context, itemClickListener);
         holder.itemsRecyclerView.setAdapter(itemAdapter);
     }
 

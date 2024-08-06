@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.my.audio_video_fm.R;
+import com.my.audio_video_fm.model.CategoryItem;
 import com.my.audio_video_fm.model.MediaItem;
 import com.my.audio_video_fm.model.SharedViewModel;
 import com.my.audio_video_fm.activity.playvideo;
@@ -22,18 +23,14 @@ import java.util.List;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MediaItemViewHolder> {
 
     public interface OnItemClickListener {
-
-
-        void onItemClick(MediaItem item);
+        void onItemClick(CategoryItem item);
     }
-
-
-    private List<MediaItem> mediaItems;
+    private List<CategoryItem> mediaItems;
     private Context context;
     private OnItemClickListener listener;
     private SharedViewModel sharedViewModel;
 
-    public ItemAdapter(List<MediaItem> mediaItems, Context context, OnItemClickListener listener) {
+    public ItemAdapter(List<CategoryItem> mediaItems, Context context, OnItemClickListener listener) {
         this.mediaItems = mediaItems;
         this.context = context;
         this.listener = listener;
@@ -48,16 +45,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MediaItemViewH
 
     @Override
     public void onBindViewHolder(@NonNull MediaItemViewHolder holder, int position) {
-        MediaItem item = mediaItems.get(position);
+        CategoryItem item = mediaItems.get(position);
 
         Glide.with(context)
-                .load(item.getThumbnailUrl())
+                .load(item.getImageUrl())
                 .placeholder(R.drawable.ic_video)
                 .error(R.drawable.ic_audiotrack)
                 .into(holder.thumbnailImageView);
         holder.itemView.setOnClickListener(v -> {
             // Create an Intent to start the PlayActivity
             Intent intent = new Intent(context, playvideo.class);
+            intent.putExtra("CATEGORY_IMAGE_URL", item.getImageUrl()); // Pass the image URL
             intent.putExtra("CATEGORY_NAME", item.getTitle());
             intent.putExtra("VIDEO_ID", "your_video_id_here");
             intent.putExtra("IMAGE_URL", "your_image_url_here");

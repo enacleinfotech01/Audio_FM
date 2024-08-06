@@ -46,6 +46,15 @@
         android:label="fragment_premimum"
         tools:layout="@layout/fragment_premimum" >
 
+
+        <action
+            android:id="@+id/action_premimumFragment_to_redeemFragment"
+            app:destination="@id/redeemFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/redeemFragment"
+        android:name="com.my.audio_video_fm.fragment.RedeemFragment"
+        android:label="fragment_redeem"
+        tools:layout="@layout/fragment_redeem" />
 
 </navigation>

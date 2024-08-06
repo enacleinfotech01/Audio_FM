@@ -17,7 +17,6 @@
             android:id="@+id/close"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_30sdp"
-
             android:paddingHorizontal="@dimen/_10sdp"
             android:src="@drawable/close_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
     </LinearLayout>

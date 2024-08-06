@@ -57,6 +57,7 @@ public class PlayFragment extends Fragment {
     private EpisodeAdapter2 adapter2;
     private List<Episode2> episodes;
     private static final String API_URL = "https://api.npoint.io/3d04705d56c3d6463fc1";
+    private static final String API_URL2 = "https://api.npoint.io/b51b1365f802d503b7fd";
     private OkHttpClient client = new OkHttpClient();
     private String selectedCategoryName;
     private boolean isExpanded = false;
@@ -135,6 +136,7 @@ public class PlayFragment extends Fragment {
             }
             episodes = new ArrayList<>();
             fetchJsonData(API_URL);
+            fetchJsonData(API_URL2);
 
         } else {
             Toast.makeText(getContext(), "No arguments provided", Toast.LENGTH_SHORT).show();

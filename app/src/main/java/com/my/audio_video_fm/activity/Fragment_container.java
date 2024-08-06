@@ -57,7 +57,5 @@ public class Fragment_container extends AppCompatActivity {
                 fragmentTransaction.commit();
             }
         }
-
-
     }
 }

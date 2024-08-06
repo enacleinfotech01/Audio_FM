@@ -31,6 +31,9 @@ import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.activity.StoreCoins;
 import com.my.audio_video_fm.adapter.HomeCategoryAdapter;
 import com.my.audio_video_fm.adapter.ViewPagerAdapter;
+import com.my.audio_video_fm.model.CategoryItem;
+import com.my.audio_video_fm.model.Episode;
+import com.my.audio_video_fm.model.Episode2;
 import com.my.audio_video_fm.model.HomeCategory;
 import com.my.audio_video_fm.model.MediaItem;
 import com.my.audio_video_fm.activity.playvideo;
@@ -54,7 +57,6 @@ public class HomeFragment extends Fragment {
     ImageView profile;
     ImageView langues;
     ImageView store;
-    private DotsIndicator dotsIndicator;
     private Handler handler;
     private Runnable runnable;
 
@@ -62,7 +64,7 @@ public class HomeFragment extends Fragment {
     private HomeCategoryAdapter categoryAdapter;
     private List<HomeCategory> categories;
     private OkHttpClient client = new OkHttpClient();
-    private static final String JSON_URL = "https://api.npoint.io/dbb28723c94bbbc7c5e5";
+    private static final String JSON_URL = "https://api.npoint.io/b51b1365f802d503b7fd";
     private List<Integer> imageList;
     TextView search;
 
@@ -126,7 +128,6 @@ public class HomeFragment extends Fragment {
 
     private void initializeViews(View view) {
         viewPager = view.findViewById(R.id.viewpager);
-        dotsIndicator = view.findViewById(R.id.dots_indicator);
         categoriesRecyclerView = view.findViewById(R.id.categories_recycler_view);
         categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
@@ -139,8 +140,6 @@ public class HomeFragment extends Fragment {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(imageList);
         viewPager.setAdapter(adapter);
-        dotsIndicator.setViewPager2(viewPager);
-
         handler = new Handler(Looper.getMainLooper());
         runnable = new Runnable() {
             @Override
@@ -186,24 +185,28 @@ public class HomeFragment extends Fragment {
                     categories = parseJson(jsonData);
 
                     // Update UI on the main thread
-                    requireActivity().runOnUiThread(() -> setupRecyclerView());
+                    if (isAdded()) {
+                        requireActivity().runOnUiThread(() -> setupRecyclerView());
+                    } else {
+                        Log.e(TAG, "Fragment not attached to activity");
+                    }
                 } else {
                     Log.e(TAG, "Response unsuccessful or body is null");
                 }
             }
+
         });
     }
 
     private void setupRecyclerView() {
         categoryAdapter = new HomeCategoryAdapter(categories, requireContext(), item -> {
-            Log.d(TAG, "Item clicked: " + item.getType());
-            if ("video".equals(item.getType())) {
-                String videoId = item.getVideoId();
-                String image = item.getThumbnailUrl();
+            Log.d(TAG, "Item clicked: " + item.getTitle());
+            if ("video".equals(item.getTitle())) {
+                String videoId = item.getDescription();
+                String image = item.getImageUrl();
                 Log.d(TAG, "Video ID: " + videoId);
-                openPlayFragment(videoId, image);
             } else {
-                Toast.makeText(requireContext(), "Not a video item: " + item.getType(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Not a video item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
             }
         });
         categoriesRecyclerView.setAdapter(categoryAdapter);
@@ -215,28 +218,38 @@ public class HomeFragment extends Fragment {
         List<HomeCategory> categories = new ArrayList<>();
         try {
             JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
-            JsonArray mediaItemsArray = jsonObject.getAsJsonArray("media_items");
+            JsonArray categoryArray = jsonObject.getAsJsonArray("category");
 
-            Map<String, List<MediaItem>> audioCategoryMap = new HashMap<>();
-            Map<String, List<MediaItem>> videoCategoryMap = new HashMap<>();
+            for (JsonElement categoryElement : categoryArray) {
+                JsonObject categoryObject = categoryElement.getAsJsonObject();
+                String name = categoryObject.get("name").getAsString();
+                JsonArray categoryItemArray = categoryObject.getAsJsonArray("categoryItem");
 
-            for (JsonElement element : mediaItemsArray) {
-                MediaItem item = gson.fromJson(element, MediaItem.class);
-                if ("audio".equals(item.getType())) {
-                    audioCategoryMap.computeIfAbsent(item.getCategory(), k -> new ArrayList<>()).add(item);
-                } else if ("video".equals(item.getType())) {
-                    videoCategoryMap.computeIfAbsent(item.getCategory(), k -> new ArrayList<>()).add(item);
+                List<CategoryItem> categoryItems = new ArrayList<>();
+                for (JsonElement itemElement : categoryItemArray) {
+                    JsonObject itemObject = itemElement.getAsJsonObject();
+                    int id = itemObject.get("id").getAsInt();
+                    String title = itemObject.get("title").getAsString();
+                    String description = itemObject.get("description").getAsString();
+                    String imageUrl = itemObject.get("imageUrl").getAsString();
+
+                    JsonArray episodesArray = itemObject.has("episodes") ? itemObject.getAsJsonArray("episodes") : new JsonArray();
+                    List<Episode2> episodes = new ArrayList<>();
+                    for (JsonElement episodeElement : episodesArray) {
+                        JsonObject episodeObject = episodeElement.getAsJsonObject();
+                        int episodeId = episodeObject.get("id").getAsInt();
+                        String episodeTitle = episodeObject.get("title").getAsString();
+                        String time = episodeObject.get("time").getAsString();
+                        String episodeImageUrl = episodeObject.get("imageUrl").getAsString();
+                        String audioUrl = episodeObject.has("audioUrl") ? episodeObject.get("audioUrl").getAsString() : null;
+
+                        episodes.add(new Episode2(episodeId, episodeTitle, time, episodeImageUrl, audioUrl));
+                    }
+
+                    categoryItems.add(new CategoryItem(id, title, description, imageUrl, episodes));
                 }
-            }
 
-            // Add audio categories to the list
-            for (Map.Entry<String, List<MediaItem>> entry : audioCategoryMap.entrySet()) {
-                categories.add(new HomeCategory(entry.getKey(), entry.getValue()));
-            }
-
-            // Add video categories to the list
-            for (Map.Entry<String, List<MediaItem>> entry : videoCategoryMap.entrySet()) {
-                categories.add(new HomeCategory(entry.getKey(), entry.getValue()));
+                categories.add(new HomeCategory(name, categoryItems));
             }
 
             Log.d(TAG, "JSON parsing completed successfully");
@@ -244,14 +257,6 @@ public class HomeFragment extends Fragment {
             Log.e(TAG, "Error parsing JSON data", e);
         }
         return categories;
-    }
-
-    private void openPlayFragment(String videoId, String imageUrl) {
-        Intent intent = new Intent(requireActivity(), playvideo.class);
-        intent.putExtra("VIDEO_ID", videoId);
-        intent.putExtra("imageUrl", imageUrl);
-        startActivity(intent);
-        Log.d(TAG, "Opening play fragment for video ID: " + videoId);
     }
 
     @Override
