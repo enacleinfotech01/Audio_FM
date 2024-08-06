@@ -153,8 +153,9 @@ public class PlayFragment extends Fragment {
         imageView.setOnClickListener(v -> {
             if (episodes != null && !episodes.isEmpty()) {
                 if (!isPlaying) {
-                    // Example to use first episode, adjust as needed
+                    // Example to use
                     Episode2 selectedEpisode = episodes.get(0);
+
                     Intent intent = new Intent(getActivity(), EpisodeActivity.class);
                     intent.putExtra("IMAGE_URL", selectedEpisode.getImageUrl2()); // Ensure these keys match your data
                     intent.putExtra("TITLE", selectedEpisode.getTitle2());

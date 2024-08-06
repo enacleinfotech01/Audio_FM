@@ -122,13 +122,6 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_13sdp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:drawableEnd="@drawable/play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24"
-                        android:gravity="center"
-                        android:text="हिंदी" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -139,7 +132,7 @@
                     android:padding="@dimen/_9sdp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="@dimen/_240sdp"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/translate_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
@@ -147,6 +140,13 @@
                         android:text="Audio Language"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_13sdp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableEnd="@drawable/play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+                        android:gravity="center"
+                        android:text="हिंदी" />
                 </LinearLayout>
 
                 <LinearLayout
