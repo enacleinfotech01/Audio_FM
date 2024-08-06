@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.my.audio_video_fm"
         minSdk 21
-        targetSdk 34
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -70,4 +70,5 @@ dependencies {
     //lottie
     implementation 'com.airbnb.android:lottie:6.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.channguyen:rsv:1.0.1'
 }

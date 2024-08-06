@@ -1,9 +1,20 @@
 package com.my.audio_video_fm;
 
 public class TrackFiles {
+    private int id;
+
+
     private String title;
-    private String singer;
+    private String artist;
     private int thumbnail;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -13,12 +24,12 @@ public class TrackFiles {
         this.title = title;
     }
 
-    public String getSinger() {
-        return singer;
+    public String getArtist() {
+        return artist;
     }
 
-    public void setSinger(String singer) {
-        this.singer = singer;
+    public void setArtist(String artist) {
+        this.artist = artist;
     }
 
     public int getThumbnail() {
@@ -29,9 +40,23 @@ public class TrackFiles {
         this.thumbnail = thumbnail;
     }
 
-    public TrackFiles(String title, String singer, int thumbnail) {
-        this.title = title;
-        this.singer = singer;
-        this.thumbnail = (thumbnail);
+    public int getAudioResource() {
+        return audioResource;
     }
+
+    public void setAudioResource(int audioResource) {
+        this.audioResource = audioResource;
+    }
+
+    public TrackFiles(int id, String title, String artist, int thumbnail, int audioResource) {
+        this.id = id;
+        this.title = title;
+        this.artist = artist;
+        this.thumbnail = thumbnail;
+        this.audioResource = audioResource;
+    }
+
+    private int audioResource;
+
+
 }

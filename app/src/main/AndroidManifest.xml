@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
@@ -63,6 +66,16 @@
             android:exported="false" />
 
         <service android:name=".MusicService" android:enabled="true" />
+        <receiver android:name=".NotificationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="NEXT"/>
+                <action android:name="PREVIOUS"/>
+                <action android:name="PLAY"/>
+
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

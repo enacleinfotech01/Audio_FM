@@ -1,9 +1,8 @@
 package com.my.audio_video_fm;
 
 public interface ActionPlaying {
-    void nextclicked();
+    void nextClicked();
+    void prevClicked();
 
-    void prevclicked();
-
-    void playclicked();
+    void playClicked();
 }

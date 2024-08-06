@@ -7,7 +7,7 @@ import static com.my.audio_video_fm.ApplicationClass.CHANNEL_ID_2;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
@@ -15,6 +15,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
@@ -25,7 +26,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -36,28 +39,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.IconCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.my.audio_video_fm.ActionPlaying;
 import com.my.audio_video_fm.MusicService;
 import com.my.audio_video_fm.NotificationReceiver;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.TrackFiles;
+import com.my.audio_video_fm.bottomsheet.SpeedControlBottomSheetFragment;
 import com.my.audio_video_fm.bottomsheet.TimerBottomSheetFragment;
-import com.my.audio_video_fm.model.EpisodeItem;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class EpisodeActivity extends AppCompatActivity implements TimerBottomSheetFragment.TimerSelectionListener, ActionPlaying, ServiceConnection {
     private ImageView targetImageView, playMusic, forward10Sec, replay10Sec, nextMusic, beforeMusic;
     private MediaPlayer mediaPlayer;
     private SeekBar musicSeekBar;
-
+    TextView speed;
     MusicService musicService;
+    MediaSessionCompat mediaSession;
+    private TextView speedTextView;
+    private SeekBar speedSeekBar;
+    int position = 0;
+
+    ArrayList<TrackFiles> trackFilesArrayList = new ArrayList<>();
     MediaSessionCompat mediaSessionCompat;
     private CountDownTimer countDownTimer;
     TextView go;
@@ -67,16 +74,16 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
 
     private TextView startTimeline, endTimeline;
     private Handler handler = new Handler();
-    private Runnable updateRunnable;
+
     private boolean isPlaying = false;
     private TextView musictext;
     private ImageView bluetooth;
-    private List<EpisodeItem> musicList = new ArrayList<>();
+
     private int currentIndex = 0;
     TextView bottomtime;
     private String audioPath;
     private static final String TAG = "Episode";
-    private int postion;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -94,11 +101,12 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         musicSeekBar = findViewById(R.id.musicSeekBar);
         startTimeline = findViewById(R.id.starttimeline);
         endTimeline = findViewById(R.id.endtimeline);
+        speed=findViewById(R.id.speed);
         go = findViewById(R.id.go);
-        Intent intent = new Intent(this, MusicService.class);
-        bindService(intent, this, BIND_AUTO_CREATE);
+        mediaSession = new MediaSessionCompat(this, "PlayerAudio");
         bluetooth = findViewById(R.id.bluetooth);
-        poppulatefile();
+        poppulateFiles();
+        setupSeekBar();
         bluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +129,12 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
                 e.printStackTrace();
             }
         }
+        speed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBottomSheet();
+            }
+        });
 
 
         findViewById(R.id.show_dialog_button).setOnClickListener(v -> {
@@ -150,51 +164,58 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
             Log.e("EpisodeActivity", "Title not received");
         }
 
-        // Initialize music list with EpisodeItem
 
-        if (!musicList.isEmpty()) {
-            initializeMediaPlayer(musicList.get(currentIndex));
+        nextMusic.setOnClickListener(view -> {
+            nextClicked();
+            playNextMusic();
+            Log.e("Playing", isPlaying + "");
+            showNotification(isPlaying ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play);
 
-            playMusic.setOnClickListener(v -> {
-                if (isPlaying) {
-                    pauseMusic();
-                    showNotification(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24);
-                } else {
-                    playMusic();
+        });
 
-                    showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24);
-                }
+        beforeMusic.setOnClickListener(view -> {
+            prevClicked();
+            playPreviousMusic();
+            Log.e("Playing", isPlaying + "");
+            showNotification(isPlaying ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play);
+
+        });
+
+        playMusic.setOnClickListener(view -> {
+            playClicked();
+
+            Log.e("Playing", isPlaying + "");
+        });
 
 
-            });
-
-
-            forward10Sec.setOnClickListener(v -> forward10Seconds());
-            replay10Sec.setOnClickListener(v -> replay10Seconds());
-            nextMusic.setOnClickListener(v -> playNextMusic());
-            beforeMusic.setOnClickListener(v -> playPreviousMusic());
+        forward10Sec.setOnClickListener(v -> forward10Seconds());
+        replay10Sec.setOnClickListener(v -> replay10Seconds());
+        onTrackSelected(0);
 
             updateSeekBar();
-            musicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser) {
-                        mediaPlayer.seekTo(progress * 1000);
-                        startTimeline.setText(formatTime(progress));
-                    }
+        musicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mediaPlayer != null && fromUser) {
+                    mediaPlayer.seekTo(progress * 1000);
+                    startTimeline.setText(formatTime(progress));
                 }
+            }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    handler.removeCallbacks(updateRunnable);
-                }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Stop updating SeekBar while user is interacting with it
+                handler.removeCallbacks(updateRunnable);
+            }
 
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    handler.post(updateRunnable);
-                }
-            });
-        }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Resume updating SeekBar after user stops interacting
+                handler.post(updateRunnable);
+            }
+        });
+
+
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,66 +234,165 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         });
     }
 
-    private void poppulatefile() {
-        String title = getIntent().getStringExtra("title");
-        String imageUrl = getIntent().getStringExtra("IMAGE_URL");
-
-        // Assuming EpisodeItem has been modified to accept a String for the image URL
-        musicList.add(new EpisodeItem(1, imageUrl, title, "3:00", R.raw.music1, R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "music"));
-        musicList.add(new EpisodeItem(2, imageUrl, title, "4:00", R.raw.music2, R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "music"));
-        musicList.add(new EpisodeItem(3, imageUrl, title, "2:30", R.raw.music3, R.drawable.download_24dp_e8eaed_fill0_wght400_grad0_opsz24, R.drawable.daimond, "music"));
+    private void onTrackSelected(int position) {
+        if (position >= 0 && position < trackFilesArrayList.size()) {
+            TrackFiles selectedTrack = trackFilesArrayList.get(position);
+            initializeMediaPlayer(selectedTrack);
+        } else {
+            Log.e("SelectionError", "Invalid track position: " + position);
+        }
     }
 
+    private void poppulateFiles() {
+        trackFilesArrayList.add(new TrackFiles(1, "Faded", "Alan Walker", R.drawable.t1, R.raw.music1));
+        trackFilesArrayList.add(new TrackFiles(2, "Attention", "Charlie Puth", R.drawable.t2, R.raw.music2));
+        trackFilesArrayList.add(new TrackFiles(3, "Baarish", "Darshan Raval", R.drawable.t3, R.raw.music3));
+        trackFilesArrayList.add(new TrackFiles(4, "Believer", "Imagine Dragons", R.drawable.t4, R.raw.music2));
+    }
 
-    private void initializeMediaPlayer(EpisodeItem episodeItem) {
+    @SuppressLint("NewApi")
+    private void initializeMediaPlayer(TrackFiles trackFiles) {
+        // Release the existing MediaPlayer if it is not null
         if (mediaPlayer != null) {
             mediaPlayer.release();
+            mediaPlayer = null; // Set mediaPlayer to null to avoid accidental usage
         }
 
-        mediaPlayer = MediaPlayer.create(this, episodeItem.getIconResId());
+        int audioResId = trackFiles.getId();
 
-        if (mediaPlayer != null) {
-            int songDuration = mediaPlayer.getDuration() / 1000; // Duration in seconds
-            musicSeekBar.setMax(songDuration);
-            endTimeline.setText(formatTime(songDuration));
+        // Check if the resource ID is valid
+        if (audioResId != 0) {
+            try {
+                // Initialize MediaPlayer with the provided audio resource ID
+                mediaPlayer = MediaPlayer.create(this, audioResId);
+
+                // Check if MediaPlayer was successfully initialized
+                if (mediaPlayer != null) {
+                    // Set default playback speed
+                    mediaPlayer.setPlaybackParams(mediaPlayer.getPlaybackParams().setSpeed(1.0f));
+
+                    // Get song duration and set up the seek bar
+                    int songDuration = mediaPlayer.getDuration() / 1000; // Duration in seconds
+
+                    if (musicSeekBar != null) {
+                        musicSeekBar.setMax(songDuration);
+                    }
+                    if (endTimeline != null) {
+                        endTimeline.setText(formatTime(songDuration));
+                    }
+                    updateSeekBar(); // Start updating the seek bar
+                } else {
+                    // Handle the case where MediaPlayer initialization failed
+                    Log.e("MediaPlayerError", "Failed to initialize MediaPlayer with resource ID: " + audioResId);
+                }
+            } catch (Resources.NotFoundException e) {
+                Log.e("MediaPlayerError", "Resource not found for ID: " + audioResId, e);
+            }
+        } else {
+            // Log an error if the resource ID is invalid
+            Log.e("MediaPlayerError", "Invalid audio resource ID: " + audioResId);
         }
+    }
+
+    private final Runnable updateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mediaPlayer != null) {
+                int currentPosition = mediaPlayer.getCurrentPosition() / 1000; // Current position in seconds
+                if (musicSeekBar != null) {
+                    musicSeekBar.setProgress(currentPosition);
+                }
+                if (startTimeline != null) {
+                    startTimeline.setText(formatTime(currentPosition));
+                }
+                handler.postDelayed(this, 1000); // Update every second
+            }
+        }
+    };
+
+
+
+    @Override
+    public void playClicked() {
+        if (isPlaying) {
+            // Pause music
+            isPlaying = false;
+            playMusic.setImageResource(R.drawable.ic_play); // Set play icon
+            if (musicService != null) {
+                musicService.pauseTrack();
+            }
+        } else {
+            // Play music
+            isPlaying = true;
+            playMusic.setImageResource(R.drawable.ic_pause_black_24dp); // Set pause icon
+            if (musicService != null) {
+                musicService.playTrack(trackFilesArrayList.get(position).getAudioResource());
+            }
+        }
+        // Update notification with the correct icon
+        showNotification(isPlaying ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        unbindService(this);
+    public void nextClicked() {
+        // Move to the next track
+        if (position == trackFilesArrayList.size() - 1) {
+            position = 0;
+        } else {
+            position++;
+        }
+        musictext.setText(trackFilesArrayList.get(position).getTitle());
+
+        if (musicService != null) {
+            musicService.playTrack(trackFilesArrayList.get(position).getAudioResource());
+            // Ensure isPlaying is true if music is playing
+            isPlaying = true;
+            playMusic.setImageResource(R.drawable.ic_pause_black_24dp); // Update play/pause icon
+        }
+
+        // Update notification with the correct icon
+        showNotification(isPlaying ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play);
     }
+
+    @Override
+    public void prevClicked() {
+        // Move to the previous track
+        if (position == 0) {
+            position = trackFilesArrayList.size() - 1;
+        } else {
+            position--;
+        }
+        musictext.setText(trackFilesArrayList.get(position).getTitle());
+
+        if (musicService != null) {
+            musicService.playTrack(trackFilesArrayList.get(position).getAudioResource());
+            // Ensure isPlaying is true if music is playing
+            isPlaying = true;
+            playMusic.setImageResource(R.drawable.ic_pause_black_24dp); // Update play/pause icon
+        }
+
+        // Update notification with the correct icon
+        showNotification(isPlaying ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play);
+    }
+
 
     private void playMusic() {
         if (mediaPlayer != null) {
-
-            mediaPlayer.start();
-            isPlaying = true;
-            playMusic.setImageResource(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your pause icon
-            handler.post(updateRunnable);
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                isPlaying = false;
+                playMusic.setImageResource(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your play icon
+                showNotification(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update notification with play icon
+            } else {
+                mediaPlayer.start();
+                isPlaying = true;
+                playMusic.setImageResource(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your pause icon
+                showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update notification with pause icon
+                handler.post(updateRunnable);
+            }
         }
     }
 
-    @Override
-    protected void onResume() {
-
-        playMusic();
-        playNextMusic();
-        playPreviousMusic();
-        super.onResume();
-
-    }
-
-
-    private void pauseMusic() {
-        if (mediaPlayer != null) {
-            mediaPlayer.pause();
-            isPlaying = false;
-            playMusic.setImageResource(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your play icon
-            handler.removeCallbacks(updateRunnable);
-        }
-    }
 
     private void toggleBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -295,6 +415,19 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         } else {
             Toast.makeText(getApplicationContext(), "Bluetooth is already enabled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this, MusicService.class);
+        bindService(intent, this, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindService(this);
     }
 
     private boolean hasBluetoothPermissions() {
@@ -350,12 +483,7 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
                 mediaPlayer.seekTo(mediaPlayer.getDuration());
             }
         }
-        if (isPlaying) {
-            showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24);
-        } else {
 
-            showNotification(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24);
-        }
     }
 
     private void replay10Seconds() {
@@ -367,38 +495,39 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
                 mediaPlayer.seekTo(0);
             }
         }
-        if (isPlaying) {
-            showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24);
-        } else {
 
-            showNotification(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24);
-        }
     }
 
     private void playNextMusic() {
-        if (!musicList.isEmpty() && currentIndex < musicList.size() - 1) {
+        if (!trackFilesArrayList.isEmpty() && currentIndex < trackFilesArrayList.size() - 1) {
             currentIndex++;
-            initializeMediaPlayer(musicList.get(currentIndex));
-            musictext.setText(musicList.get(currentIndex).getIconResId());// Initializes media player with the new track
-            playMusic(); // Starts playing the new track
-            updateTitle(musicList.get(currentIndex)); // Update title when changing track
+            initializeMediaPlayer(trackFilesArrayList.get(currentIndex)); // Initializes media player with the new track
+            mediaPlayer.start(); // Starts playing the new track
+            isPlaying = true;
+            playMusic.setImageResource(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update play button to pause icon
+            nextClicked();
+            musictext.setText(trackFilesArrayList.get(currentIndex).getId()); // Update text with the new track information
+            updateTitle(trackFilesArrayList.get(currentIndex)); // Update title when changing track
+
+            showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update notification with pause icon
         }
     }
 
     private void playPreviousMusic() {
-        if (!musicList.isEmpty() && currentIndex > 0) {
+        if (!trackFilesArrayList.isEmpty() && currentIndex > 0) {
             currentIndex--;
-            initializeMediaPlayer(musicList.get(currentIndex));
-            musictext.setText(musicList.get(currentIndex).getIconResId());// Initializes media player with the new track
+            prevClicked();
+            initializeMediaPlayer(trackFilesArrayList.get(currentIndex));
+            musictext.setText(trackFilesArrayList.get(currentIndex).getId());// Initializes media player with the new track
             playMusic(); // Starts playing the new track
-            updateTitle(musicList.get(currentIndex)); // Update title when changing track
+            updateTitle(trackFilesArrayList.get(currentIndex)); // Update title when changing track
+
         }
     }
 
-
-    private void updateTitle(EpisodeItem episodeItem) {
-        if (episodeItem != null) {
-            musictext.setText(episodeItem.getTitle()); // Update the title TextView
+    private void updateTitle(TrackFiles trackFiles) {
+        if (trackFiles != null) {
+            musictext.setText(trackFiles.getTitle()); // Update the title TextView
         } else {
             Log.e("EpisodeActivity", "EpisodeItem is null");
         }
@@ -411,19 +540,47 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         return String.format("%d:%02d", minutes, seconds);
     }
 
+
     private void updateSeekBar() {
         if (mediaPlayer != null) {
             int currentPosition = mediaPlayer.getCurrentPosition() / 1000; // Position in seconds
             musicSeekBar.setProgress(currentPosition);
             startTimeline.setText(formatTime(currentPosition));
-            updateRunnable = new Runnable() {
-                @Override
-                public void run() {
+
+        }
+    }
+
+    private void setupSeekBar() {
+        musicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    if (mediaPlayer != null) {
+                        mediaPlayer.seekTo(progress * 1000); // Convert seconds to milliseconds
+                        startTimeline.setText(formatTime(progress));
+                    } else {
+                        // Handle the case where mediaPlayer is null
+                        Log.e("MediaPlayerError", "MediaPlayer is not initialized.");
+                    }
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Stop updating seek bar when user is manually adjusting it
+                if (updateRunnable != null) {
+                    handler.removeCallbacks(updateRunnable);
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Resume updating seek bar after user stops adjusting it
+                if (mediaPlayer != null) {
                     updateSeekBar();
                 }
-            };
-            handler.postDelayed(updateRunnable, 1000);
-        }
+            }
+        });
     }
 
 
@@ -434,7 +591,27 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        handler.removeCallbacks(updateRunnable);
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        if (handler != null && updateRunnable != null) {
+            handler.removeCallbacks(updateRunnable);
+        }
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        MusicService.MyBinder binder = (MusicService.MyBinder) iBinder;
+        musicService = binder.getService();
+        musicService.setCallBack(EpisodeActivity.this);
+        Log.e("Connected", musicService + "");
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+        musicService = null;
+        Log.e("Disconnected", musicService + "");
     }
 
     @Override
@@ -522,7 +699,6 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         return 0; // Placeholder value
     }
 
-
     @Override
     public void onCustomTimerSelected(int hours, int minutes) {
         String customTimer = hours + " hours and " + minutes + " minutes";
@@ -575,80 +751,70 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         overridePendingTransition(0, R.anim.slide_out_down);
     }
 
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        MusicService.MyBinder binder = (MusicService.MyBinder) service;
-        musicService = binder.getService();
-        Log.e("Connected", "musicservices");
-    }
 
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        Log.e("Discountect", musicService + "");
-        musicService = null;
-    }
+    public void showNotification(int playPauseBtn) {
+        // Create an Intent for the MainActivity
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
-    @Override
-    public void nextclicked() {
-
-    }
-
-    @Override
-    public void prevclicked() {
-
-    }
-
-    @Override
-    public void playclicked() {
-
-    }
-
-    @SuppressLint("UnspecifiedImmutableFlag")
-    public void showNotification(int PlayPausebtn) {
-        String title = getIntent().getStringExtra("title");
-        String imageUrl = getIntent().getStringExtra("IMAGE_URL");
-
-        Intent intent = new Intent(this, EpisodeActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
+        // Intents for Previous, Play/Pause, and Next actions
         Intent prevIntent = new Intent(this, NotificationReceiver.class).setAction(ACTION_PREVIOUS);
-        PendingIntent prevpendingIntent = PendingIntent.getBroadcast(this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent prevPendingIntent = PendingIntent.getBroadcast(
+                this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
         Intent playIntent = new Intent(this, NotificationReceiver.class).setAction(ACTION_PLAY);
-        PendingIntent playpendingIntent = PendingIntent.getBroadcast(this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent playPendingIntent = PendingIntent.getBroadcast(
+                this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
         Intent nextIntent = new Intent(this, NotificationReceiver.class).setAction(ACTION_NEXT);
-        PendingIntent nextpendingIntent = PendingIntent.getBroadcast(this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(
+                this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
-        // Decode image from URL string
-        Bitmap picture = null;
-        try {
-            URL url = new URL(imageUrl);
-            picture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Load the large icon for the notification
+        Bitmap picture = BitmapFactory.decodeResource(getResources(), trackFilesArrayList.get(position).getThumbnail());
+
+        // Create NotificationCompat.Builder
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_2)
+                .setSmallIcon(R.drawable.ic_skip_next) // Ensure this icon exists
+                .setLargeIcon(picture)
+                .setContentTitle(trackFilesArrayList.get(position).getTitle())
+                .setContentText(trackFilesArrayList.get(position).getArtist())
+                .addAction(R.drawable.ic_skip_previous, "Previous", prevPendingIntent)
+                .addAction(playPauseBtn, "Play", playPendingIntent)
+                .addAction(R.drawable.ic_skip_next, "Next", nextPendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setContentIntent(contentIntent)
+                .setOnlyAlertOnce(true)
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                        .setMediaSession(mediaSession.getSessionToken())
+                        .setShowActionsInCompactView(1)); // Shows only the Play/Pause action in compact view
+
+        // Ensure notification channel is created
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID_2,
+                    "Playback Channel",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
         }
 
-        Notification notification = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            notification = new NotificationCompat.Builder(this, CHANNEL_ID_2)
-                    .setSmallIcon(IconCompat.createWithContentUri(musicList.get(postion).getImageUrl())) // Replace with your own small icon
-                    .setContentTitle(musicList.get(postion).getTitle())
-                    .setLargeIcon(picture)
-                    .addAction(R.drawable.replay_10_24dp_e8eaed_fill0_wght400_grad0_opsz24, "Previous", prevpendingIntent) // Replace with your own icons
-                    .addAction(PlayPausebtn, "Play", playpendingIntent)
-                    .addAction(R.drawable.forward_10_24dp_e8eaed_fill0_wght400_grad0_opsz24, "Next", nextpendingIntent) // Replace with your own icons
-                    .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                            .setMediaSession(mediaSessionCompat.getSessionToken()))
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setContentIntent(contentIntent)
-                    .setOnlyAlertOnce(true)
-                    .build();
-        }
-
+        // Notify with the notification
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
+        notificationManager.notify(1, builder.build()); // Use a consistent ID
     }
 
+    private void showBottomSheet() {
+        SpeedControlBottomSheetFragment bottomSheetFragment = new SpeedControlBottomSheetFragment();
+        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+    }
 
 }
