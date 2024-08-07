@@ -12,10 +12,6 @@ import com.my.audio_video_fm.fragment.StudentOfferFragment;
 
 public class PagerAdapter extends FragmentStateAdapter {
 
-    public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
-        super(fragmentActivity);
-    }
-
     public PagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
@@ -23,6 +19,7 @@ public class PagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        // Return a different fragment based on position
         switch (position) {
             case 0:
                 return new RedeemVoucherFragment();
@@ -35,6 +32,7 @@ public class PagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 2; // Number of tabs
+        return 2; // Number of pages
     }
 }
+

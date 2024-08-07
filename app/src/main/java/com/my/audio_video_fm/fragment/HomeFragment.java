@@ -13,37 +13,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.my.audio_video_fm.bottomsheet.LanguageBottomSheetDialog;
-import com.my.audio_video_fm.activity.Profile;
 import com.my.audio_video_fm.R;
+import com.my.audio_video_fm.activity.Profile;
 import com.my.audio_video_fm.activity.StoreCoins;
 import com.my.audio_video_fm.adapter.HomeCategoryAdapter;
 import com.my.audio_video_fm.adapter.ViewPagerAdapter;
+import com.my.audio_video_fm.bottomsheet.LanguageBottomSheetDialog;
 import com.my.audio_video_fm.model.CategoryItem;
-import com.my.audio_video_fm.model.Episode;
 import com.my.audio_video_fm.model.Episode2;
 import com.my.audio_video_fm.model.HomeCategory;
-import com.my.audio_video_fm.model.MediaItem;
-import com.my.audio_video_fm.activity.playvideo;
-import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -54,9 +50,9 @@ import okhttp3.Response;
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private ViewPager2 viewPager;
-    ImageView profile;
-    ImageView langues;
-    ImageView store;
+    private ImageView profile;
+    private ImageView langues;
+    private ImageView store;
     private Handler handler;
     private Runnable runnable;
 
@@ -66,48 +62,38 @@ public class HomeFragment extends Fragment {
     private OkHttpClient client = new OkHttpClient();
     private static final String JSON_URL = "https://api.npoint.io/b51b1365f802d503b7fd";
     private List<Integer> imageList;
-    TextView search;
+    private TextView search;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         search = view.findViewById(R.id.search);
         profile = view.findViewById(R.id.profile);
         langues = view.findViewById(R.id.langues);
-        store=view.findViewById(R.id.store);
+        store = view.findViewById(R.id.store);
+        bottomNavigationView = requireActivity().findViewById(R.id.bottomnev);
 
-        store.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireActivity(), StoreCoins.class);
-                startActivity(intent);
-            }
+        store.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), StoreCoins.class);
+            startActivity(intent);
         });
 
-        langues.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LanguageBottomSheetDialog bottomSheetDialog = new LanguageBottomSheetDialog();
-                bottomSheetDialog.setOnLanguageSelectedListener(new LanguageBottomSheetDialog.OnLanguageSelectedListener() {
-                    @Override
-                    public void onLanguageSelected(String language) {
-                        Toast.makeText(requireContext(), "Selected: " + language, Toast.LENGTH_SHORT).show();
-                        // Handle language selection
-                    }
-                });
-                bottomSheetDialog.show(getChildFragmentManager(), "LanguageBottomSheet");
-            }
+        langues.setOnClickListener(v -> {
+            LanguageBottomSheetDialog bottomSheetDialog = new LanguageBottomSheetDialog();
+            bottomSheetDialog.setOnLanguageSelectedListener(language -> {
+                Toast.makeText(requireContext(), "Selected: " + language, Toast.LENGTH_SHORT).show();
+                // Handle language selection
+            });
+            bottomSheetDialog.show(getChildFragmentManager(), "LanguageBottomSheet");
         });
+
         // Initialize views
         initializeViews(view);
 
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireActivity(), Profile.class);
-                startActivity(intent);
-            }
+        profile.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), Profile.class);
+            startActivity(intent);
         });
 
         // Setup ViewPager for image slider
@@ -115,14 +101,17 @@ public class HomeFragment extends Fragment {
 
         // Fetch JSON data from the URL
         fetchJsonData(JSON_URL);
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavController navController = NavHostFragment.findNavController(HomeFragment.this);
-                navController.navigate(R.id.searchFragment);
 
-            }
+        search.setOnClickListener(v -> {
+            // Navigate to SearchFragment using FragmentTransaction
+            Fragment searchFragment = new SearchFragment();
+            FragmentManager fragmentManager = getParentFragmentManager(); // Use getParentFragmentManager() if within a nested fragment
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentContainerView, searchFragment); // Replace with your container ID
+            fragmentTransaction.addToBackStack(null); // Optional: Add to back stack to allow navigation back
+            fragmentTransaction.commit();
         });
+
         return view;
     }
 
@@ -155,7 +144,6 @@ public class HomeFragment extends Fragment {
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                // Remove and restart the auto-scroll timer to ensure it resumes correctly
                 handler.removeCallbacks(runnable);
                 handler.postDelayed(runnable, 3000);
             }
@@ -165,11 +153,7 @@ public class HomeFragment extends Fragment {
         handler.postDelayed(runnable, 3000);
     }
 
-
-
-
     private void fetchJsonData(String url) {
-        // Create a request to fetch data from the provided URL
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -184,7 +168,6 @@ public class HomeFragment extends Fragment {
                     Log.d(TAG, "JSON data fetched successfully");
                     categories = parseJson(jsonData);
 
-                    // Update UI on the main thread
                     if (isAdded()) {
                         requireActivity().runOnUiThread(() -> setupRecyclerView());
                     } else {
@@ -194,7 +177,6 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "Response unsuccessful or body is null");
                 }
             }
-
         });
     }
 
@@ -251,10 +233,8 @@ public class HomeFragment extends Fragment {
 
                 categories.add(new HomeCategory(name, categoryItems));
             }
-
-            Log.d(TAG, "JSON parsing completed successfully");
         } catch (Exception e) {
-            Log.e(TAG, "Error parsing JSON data", e);
+            e.printStackTrace();
         }
         return categories;
     }
@@ -263,7 +243,5 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         handler.removeCallbacks(runnable);
-        Log.d(TAG, "Handler callbacks removed");
     }
-
 }

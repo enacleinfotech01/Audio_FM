@@ -107,6 +107,7 @@ public class DisplayActivity extends AppCompatActivity {
                                 String episodeImageUrl = episodeObject.get("imageUrl").getAsString();
                                 String episodeAudioUrl = episodeObject.has("audioUrl") ? episodeObject.get("audioUrl").getAsString() : null;
 
+
                                 Episode2 episode = new Episode2(episodeId, episodeTitle, episodeTime, episodeImageUrl, episodeAudioUrl);
                                 episodes.add(episode);
                             }
