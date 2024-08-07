@@ -12,6 +12,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -26,9 +28,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -41,7 +41,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.my.audio_video_fm.ActionPlaying;
 import com.my.audio_video_fm.MusicService;
 import com.my.audio_video_fm.NotificationReceiver;
@@ -53,10 +52,31 @@ import com.my.audio_video_fm.bottomsheet.TimerBottomSheetFragment;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class EpisodeActivity extends AppCompatActivity implements TimerBottomSheetFragment.TimerSelectionListener, ActionPlaying, ServiceConnection {
+public class EpisodeActivity extends AppCompatActivity implements TimerBottomSheetFragment.TimerSelectionListener, ActionPlaying, ServiceConnection,SpeedControlBottomSheetFragment.SpeedChangeListener {
     private ImageView targetImageView, playMusic, forward10Sec, replay10Sec, nextMusic, beforeMusic;
     private MediaPlayer mediaPlayer;
     private SeekBar musicSeekBar;
+    private boolean isBound = false;
+    private boolean isPlaying = false;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicService.MyBinder binder = (MusicService.MyBinder) service;
+            musicService = binder.getService();
+            isBound = true;
+            Log.d("EpisodeActivity", "Service bound");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            musicService = null;
+            isBound = false;
+            Log.d("EpisodeActivity", "Service disconnected");
+        }
+    };
+
+
     TextView speed;
     MusicService musicService;
     MediaSessionCompat mediaSession;
@@ -75,7 +95,7 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
     private TextView startTimeline, endTimeline;
     private Handler handler = new Handler();
 
-    private boolean isPlaying = false;
+
     private TextView musictext;
     private ImageView bluetooth;
 
@@ -101,7 +121,7 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         musicSeekBar = findViewById(R.id.musicSeekBar);
         startTimeline = findViewById(R.id.starttimeline);
         endTimeline = findViewById(R.id.endtimeline);
-        speed=findViewById(R.id.speed);
+        speed = findViewById(R.id.speed);
         go = findViewById(R.id.go);
         mediaSession = new MediaSessionCompat(this, "PlayerAudio");
         bluetooth = findViewById(R.id.bluetooth);
@@ -118,6 +138,10 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         String title = getIntent().getStringExtra("title");
         String audioUrl = getIntent().getStringExtra("AUDIO_URL");
         mediaSessionCompat = new MediaSessionCompat(this, "PlyerAudio");
+        Intent intent = new Intent(this, MusicService.class);
+        startService(intent);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+
 
         if (audioPath != null) {
             MediaPlayer mediaPlayer = new MediaPlayer();
@@ -132,7 +156,8 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         speed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBottomSheet();
+                showSpeedControlBottomSheet();
+
             }
         });
 
@@ -163,6 +188,14 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         } else {
             Log.e("EpisodeActivity", "Title not received");
         }
+        if (mediaPlayer == null) {
+            Log.e("Episode", "MediaPlayer is null. Populating files.");
+            poppulateFiles();
+        } else if (!mediaPlayer.isPlaying()) {
+            Log.e("Episode", "MediaPlayer is not playing");
+        } else {
+            Log.d("Episode", "Safe to change speed");
+        }
 
 
         nextMusic.setOnClickListener(view -> {
@@ -192,7 +225,7 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         replay10Sec.setOnClickListener(v -> replay10Seconds());
         onTrackSelected(0);
 
-            updateSeekBar();
+        updateSeekBar();
         musicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -244,23 +277,22 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
     }
 
     private void poppulateFiles() {
-        trackFilesArrayList.add(new TrackFiles(1, "Faded", "Alan Walker", R.drawable.t1, R.raw.music1));
+        trackFilesArrayList.add(new TrackFiles(1, "Faded", "Alan Walker", R.drawable.t1, R.raw.musicplay));
         trackFilesArrayList.add(new TrackFiles(2, "Attention", "Charlie Puth", R.drawable.t2, R.raw.music2));
         trackFilesArrayList.add(new TrackFiles(3, "Baarish", "Darshan Raval", R.drawable.t3, R.raw.music3));
         trackFilesArrayList.add(new TrackFiles(4, "Believer", "Imagine Dragons", R.drawable.t4, R.raw.music2));
     }
 
-    @SuppressLint("NewApi")
     private void initializeMediaPlayer(TrackFiles trackFiles) {
-        // Release the existing MediaPlayer if it is not null
+        // Release any existing MediaPlayer instance
         if (mediaPlayer != null) {
             mediaPlayer.release();
-            mediaPlayer = null; // Set mediaPlayer to null to avoid accidental usage
+            mediaPlayer = null;
         }
 
-        int audioResId = trackFiles.getId();
+        // Get the resource ID from TrackFiles
+        int audioResId = trackFiles.getAudioResource(); // Ensure getAudioResource() returns the correct resource ID
 
-        // Check if the resource ID is valid
         if (audioResId != 0) {
             try {
                 // Initialize MediaPlayer with the provided audio resource ID
@@ -268,12 +300,19 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
 
                 // Check if MediaPlayer was successfully initialized
                 if (mediaPlayer != null) {
-                    // Set default playback speed
-                    mediaPlayer.setPlaybackParams(mediaPlayer.getPlaybackParams().setSpeed(1.0f));
+                    mediaPlayer.setOnPreparedListener(mp -> {
+                        Log.d(TAG, "MediaPlayer is prepared.");
+                        // Do not start playback here, let playClicked() handle it
+                    });
 
-                    // Get song duration and set up the seek bar
+                    mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+                        Log.e(TAG, "MediaPlayer error: what=" + what + ", extra=" + extra);
+                        return true; // Indicate that the error was handled
+                    });
+
                     int songDuration = mediaPlayer.getDuration() / 1000; // Duration in seconds
 
+                    // Update UI components if they are not null
                     if (musicSeekBar != null) {
                         musicSeekBar.setMax(songDuration);
                     }
@@ -282,17 +321,18 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
                     }
                     updateSeekBar(); // Start updating the seek bar
                 } else {
-                    // Handle the case where MediaPlayer initialization failed
                     Log.e("MediaPlayerError", "Failed to initialize MediaPlayer with resource ID: " + audioResId);
                 }
             } catch (Resources.NotFoundException e) {
                 Log.e("MediaPlayerError", "Resource not found for ID: " + audioResId, e);
             }
         } else {
-            // Log an error if the resource ID is invalid
             Log.e("MediaPlayerError", "Invalid audio resource ID: " + audioResId);
         }
     }
+
+
+
 
     private final Runnable updateRunnable = new Runnable() {
         @Override
@@ -310,70 +350,109 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         }
     };
 
-
-
-    @Override
     public void playClicked() {
-        if (isPlaying) {
-            // Pause music
-            isPlaying = false;
-            playMusic.setImageResource(R.drawable.ic_play); // Set play icon
-            if (musicService != null) {
-                musicService.pauseTrack();
+        // Ensure you have a valid TrackFiles instance
+        if (position < 0 || position >= trackFilesArrayList.size()) {
+            Log.e("Episode", "Invalid position: " + position);
+            return;
+        }
+
+        // Check if MediaPlayer is already initialized
+        if (mediaPlayer == null) {
+            // Initialize MediaPlayer with the selected TrackFiles
+            TrackFiles trackFiles = trackFilesArrayList.get(position);
+            initializeMediaPlayer(trackFiles);
+        }
+
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                // Pause music
+                mediaPlayer.pause();
+                isPlaying = false;
+                playMusic.setImageResource(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your play icon
+                showNotification(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update notification with play icon
+            } else {
+                // Start or resume music
+                mediaPlayer.start();
+                isPlaying = true;
+                playMusic.setImageResource(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Replace with your pause icon
+                showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update notification with pause icon
+                handler.post(updateRunnable); // Start updating the seek bar
             }
         } else {
-            // Play music
-            isPlaying = true;
-            playMusic.setImageResource(R.drawable.ic_pause_black_24dp); // Set pause icon
-            if (musicService != null) {
-                musicService.playTrack(trackFilesArrayList.get(position).getAudioResource());
-            }
+            Log.e("Episode", "Cannot play music. MediaPlayer is null.");
         }
-        // Update notification with the correct icon
-        showNotification(isPlaying ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play);
     }
 
+
+
+
+
     @Override
+
     public void nextClicked() {
+        // Stop current track if playing
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
         // Move to the next track
         if (position == trackFilesArrayList.size() - 1) {
             position = 0;
         } else {
             position++;
         }
-        musictext.setText(trackFilesArrayList.get(position).getTitle());
 
-        if (musicService != null) {
-            musicService.playTrack(trackFilesArrayList.get(position).getAudioResource());
-            // Ensure isPlaying is true if music is playing
+        TrackFiles trackFiles = trackFilesArrayList.get(position);
+        musictext.setText(trackFiles.getTitle());
+
+        // Initialize and start the next track
+        initializeMediaPlayer(trackFiles);
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
             isPlaying = true;
-            playMusic.setImageResource(R.drawable.ic_pause_black_24dp); // Update play/pause icon
+            playMusic.setImageResource(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update play/pause icon
+            showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update notification with pause icon
         }
 
-        // Update notification with the correct icon
-        showNotification(isPlaying ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play);
+        // Update UI and start updating the seek bar
+        handler.post(updateRunnable);
     }
 
     @Override
     public void prevClicked() {
+        // Stop current track if playing
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
         // Move to the previous track
         if (position == 0) {
             position = trackFilesArrayList.size() - 1;
         } else {
             position--;
         }
-        musictext.setText(trackFilesArrayList.get(position).getTitle());
 
-        if (musicService != null) {
-            musicService.playTrack(trackFilesArrayList.get(position).getAudioResource());
-            // Ensure isPlaying is true if music is playing
+        TrackFiles trackFiles = trackFilesArrayList.get(position);
+        musictext.setText(trackFiles.getTitle());
+
+        // Initialize and start the previous track
+        initializeMediaPlayer(trackFiles);
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
             isPlaying = true;
-            playMusic.setImageResource(R.drawable.ic_pause_black_24dp); // Update play/pause icon
+            playMusic.setImageResource(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update play/pause icon
+            showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update notification with pause icon
         }
 
-        // Update notification with the correct icon
-        showNotification(isPlaying ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play);
+        // Update UI and start updating the seek bar
+        handler.post(updateRunnable);
     }
+
 
 
     private void playMusic() {
@@ -506,7 +585,9 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
             isPlaying = true;
             playMusic.setImageResource(R.drawable.play_arrow_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update play button to pause icon
             nextClicked();
-            musictext.setText(trackFilesArrayList.get(currentIndex).getId()); // Update text with the new track information
+            // Instead of setting a resource ID
+            musictext.setText(trackFilesArrayList.get(position).getTitle()); // Use the actual title string
+            // Update text with the new track information
             updateTitle(trackFilesArrayList.get(currentIndex)); // Update title when changing track
 
             showNotification(R.drawable.pause_24dp_e8eaed_fill0_wght400_grad0_opsz24); // Update notification with pause icon
@@ -518,8 +599,8 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
             currentIndex--;
             prevClicked();
             initializeMediaPlayer(trackFilesArrayList.get(currentIndex));
-            musictext.setText(trackFilesArrayList.get(currentIndex).getId());// Initializes media player with the new track
-            playMusic(); // Starts playing the new track
+            musictext.setText(trackFilesArrayList.get(currentIndex).getTitle());// Initializes media player with the new track
+       // Starts playing the new track
             updateTitle(trackFilesArrayList.get(currentIndex)); // Update title when changing track
 
         }
@@ -809,12 +890,25 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
 
         // Notify with the notification
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build()); // Use a consistent ID
+        notificationManager.notify( 1, builder.build()); // Use a consistent ID
     }
 
-    private void showBottomSheet() {
+    private void showSpeedControlBottomSheet() {
         SpeedControlBottomSheetFragment bottomSheetFragment = new SpeedControlBottomSheetFragment();
         bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
     }
+
+
+    @Override
+    public void onSpeedChanged(float speed) {
+        // Apply the speed to the MediaPlayer or other components
+        if (mediaPlayer != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mediaPlayer.setPlaybackParams(mediaPlayer.getPlaybackParams().setSpeed(speed));
+            }
+        }
+    }
+
+
 
 }

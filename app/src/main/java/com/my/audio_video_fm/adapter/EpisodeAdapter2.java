@@ -1,5 +1,6 @@
 package com.my.audio_video_fm.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import java.util.List;
 public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHolder> {
     private final List<Episode2> episodes;
     private final Context context;
+    private int completedPosition = -1; // Keeps track of which item has completed playback
 
     public EpisodeAdapter2(Context context, List<Episode2> episodes) {
         this.context = context;
@@ -36,7 +38,7 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Episode2 episode = episodes.get(position);
 
         // Load image using Glide
@@ -49,44 +51,31 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
         holder.titleTextView.setText(episode.getTitle2());
         holder.timeTextView.setText(episode.getTime2());
 
+        // Determine if the episode is completed
+        boolean isCompleted = completedPosition == position;
+        boolean isPremium = episode.getId2() == 1;
+
+        // Update view visibility and text based on the status
+        holder.lockIcon.setVisibility(isPremium ? View.GONE : View.VISIBLE);
+        holder.diamondIcon.setVisibility(isPremium ? View.GONE : View.VISIBLE);
+        holder.permalinkText.setVisibility(isPremium ? View.GONE : View.VISIBLE);
+
+        holder.permalinkText.setText(isPremium ? "" : (isCompleted ? "Completed" : "Try Premium for free"));
+
         // Set item click listener
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (position == 0) {
-                    Intent intent = new Intent(context, EpisodeActivity.class);
-                    intent.putExtra("IMAGE_URL", episode.getImageUrl2());
-                    intent.putExtra("title", episode.getTitle2());
-                    intent.putExtra("AUDIO_URL",episode.getAudioUrl());
-                    context.startActivity(intent);
-                }else {
-                    Intent intent = new Intent(context, Fragment_container.class);
-                    intent.putExtra("ID", episode.getId2()); // Include ID in intent extras
-                    context.startActivity(intent);
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (position == 0) {
+                Intent intent = new Intent(context, EpisodeActivity.class);
+                intent.putExtra("IMAGE_URL", episode.getImageUrl2());
+                intent.putExtra("title", episode.getTitle2());
+                intent.putExtra("AUDIO_URL", episode.getAudioUrl());
+                context.startActivity(intent);
+            } else {
+                Intent intent = new Intent(context, Fragment_container.class);
+                intent.putExtra("ID", episode.getId2()); // Include ID in intent extras
+                context.startActivity(intent);
             }
         });
-        // Set the visibility and content of the lock icon, diamond icon, and permalink text
-        // Here I'm assuming you have some condition to show/hide these views
-        if (episode.getId2() == 1) {
-            boolean showLockIcon = false; // Replace with your actual condition
-            boolean showDiamondIcon = false; // Replace with your actual condition
-            boolean showPermalinkText = false; // Replace with your actual condition
-
-            holder.lockIcon.setVisibility(showLockIcon ? View.VISIBLE : View.GONE);
-            holder.diamondIcon.setVisibility(showDiamondIcon ? View.VISIBLE : View.GONE);
-            holder.permalinkText.setVisibility(showPermalinkText ? View.VISIBLE : View.GONE);
-            holder.permalinkText.setText("Try Premium for free"); // Replace with your actual text
-        } else {
-            boolean showLockIcon = true; // Replace with your actual condition
-            boolean showDiamondIcon = true; // Replace with your actual condition
-            boolean showPermalinkText = true; // Replace with your actual condition
-
-            holder.lockIcon.setVisibility(showLockIcon ? View.VISIBLE : View.GONE);
-            holder.diamondIcon.setVisibility(showDiamondIcon ? View.VISIBLE : View.GONE);
-            holder.permalinkText.setVisibility(showPermalinkText ? View.VISIBLE : View.GONE);
-            holder.permalinkText.setText("Try Premium for free"); // Replace with your actual text
-        }
     }
 
     @Override
@@ -94,13 +83,19 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
         return episodes.size();
     }
 
+    // Call this method when playback is completed
+    public void setPlaybackComplete(int position) {
+        completedPosition = position;
+        notifyDataSetChanged(); // Refresh the RecyclerView to reflect changes
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView titleTextView;
         TextView timeTextView;
         ImageView itemIcon;
-        ImageView lockIcon; // New ImageView for lock icon
-        ImageView diamondIcon; // New ImageView for diamond icon
+        ImageView lockIcon;
+        ImageView diamondIcon;
         TextView permalinkText;
 
         ViewHolder(View itemView) {
@@ -109,9 +104,9 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
             titleTextView = itemView.findViewById(R.id.item_title);
             timeTextView = itemView.findViewById(R.id.item_time);
             itemIcon = itemView.findViewById(R.id.item_icon);
-            lockIcon = itemView.findViewById(R.id.lock); // Find the new ImageView
-            diamondIcon = itemView.findViewById(R.id.dimond); // Find the new ImageView
-            permalinkText = itemView.findViewById(R.id.permalink_text); // Find the new TextView
+            lockIcon = itemView.findViewById(R.id.lock);
+            diamondIcon = itemView.findViewById(R.id.dimond);
+            permalinkText = itemView.findViewById(R.id.permalink_text);
         }
     }
 }

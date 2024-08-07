@@ -3,7 +3,9 @@ package com.my.audio_video_fm;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -18,6 +20,7 @@ public class MusicService extends Service {
     public static final String ACTION_PREVIOUS = "PREVIOUS";
     public static final String ACTION_PLAY = "PLAY";
     public static final String ACTION_PAUSE = "PAUSE";
+    public static final String ACTION_SPEED = "SPEED";
 
     @Nullable
     @Override
@@ -54,6 +57,10 @@ public class MusicService extends Service {
                         actionPlaying.prevClicked();
                     }
                     break;
+                case ACTION_SPEED:
+                    float speed = intent.getFloatExtra("speed", 1.0f);
+                    setPlaybackSpeed(speed);
+                    break;
             }
         }
         return START_STICKY;
@@ -61,11 +68,18 @@ public class MusicService extends Service {
 
     public void playTrack(int audioResId) {
         if (mediaPlayer != null) {
-            mediaPlayer.reset();
-            mediaPlayer = MediaPlayer.create(this, audioResId);
-            mediaPlayer.start();
+            mediaPlayer.release(); // Release any existing MediaPlayer
+        }
+        mediaPlayer = MediaPlayer.create(this, audioResId);
+        if (mediaPlayer != null) {
+            mediaPlayer.setOnPreparedListener(mp -> mediaPlayer.start());
+            Log.d("MusicService", "Playback started");
+        } else {
+            Log.e("MusicService", "Failed to create MediaPlayer");
         }
     }
+
+
 
     public void pauseTrack() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
@@ -77,6 +91,21 @@ public class MusicService extends Service {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.reset();
+        }
+    }
+
+    public void setPlaybackSpeed(float speed) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                PlaybackParams params = mediaPlayer.getPlaybackParams();
+                params.setSpeed(speed);
+                mediaPlayer.setPlaybackParams(params);
+                Log.d("MusicService", "Playback speed set to: " + speed);
+            } else {
+                Log.w("MusicService", "MediaPlayer is null or not playing");
+            }
+        } else {
+            Log.w("MusicService", "Playback speed control is not supported on this device.");
         }
     }
 
