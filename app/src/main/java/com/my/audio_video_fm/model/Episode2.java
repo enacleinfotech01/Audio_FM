@@ -10,7 +10,6 @@ public  class Episode2 {
 
     // Getters and Setters
 
-
     public Episode2(int id2, String title2, String time2, String imageUrl2, String audioUrl) {
         this.id2 = id2;
         this.title2 = title2;

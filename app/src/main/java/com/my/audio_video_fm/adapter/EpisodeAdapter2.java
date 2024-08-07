@@ -51,20 +51,20 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
 
         // Set item click listener
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
+                Intent intent;
                 if (position == 0) {
-                    Intent intent = new Intent(context, EpisodeActivity.class);
+                    intent = new Intent(context, EpisodeActivity.class);
                     intent.putExtra("IMAGE_URL", episode.getImageUrl2());
                     intent.putExtra("title", episode.getTitle2());
-                    intent.putExtra("AUDIO_URL",episode.getAudioUrl());
-                    context.startActivity(intent);
-                }else {
-                    Intent intent = new Intent(context, Fragment_container.class);
+                    intent.putExtra("AUDIO_URL", episode.getAudioUrl());
+                } else {
+                    intent = new Intent(context, Fragment_container.class);
                     intent.putExtra("ID", episode.getId2()); // Include ID in intent extras
-                    context.startActivity(intent);
                 }
+                context.startActivity(intent);
             }
+
         });
         // Set the visibility and content of the lock icon, diamond icon, and permalink text
         // Here I'm assuming you have some condition to show/hide these views

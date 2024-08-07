@@ -1,6 +1,7 @@
 package com.my.audio_video_fm.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,10 +40,8 @@ public class Fragment_container extends AppCompatActivity {
             } else {
                 // Show fragment for other IDs
                 Fragment fragment = null;
+                fragment = new PremimumFragment(); // Example fragment
 
-                if (id == 2) {
-                    fragment = new PremimumFragment(); // Example fragment
-                }
                 // You can add more conditions here for other fragment types if needed
 
                 if (fragment != null) {
@@ -64,7 +63,6 @@ public class Fragment_container extends AppCompatActivity {
                     Log.e("YourTag", "No fragment found for id: " + id);
                 }
             }
-
         }
     }
 }
