@@ -5,7 +5,8 @@ public  class Episode2 {
     private String title2;
     private String time2;
     private String imageUrl2;
-    private String audioUrl; // Add this field
+    private String audioUrl;
+    // Add this field
 
     // Getters and Setters
 

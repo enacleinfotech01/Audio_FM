@@ -3,6 +3,8 @@ package com.my.audio_video_fm.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,26 +38,33 @@ public class Fragment_container extends AppCompatActivity {
                 finish(); // Optionally close this activity
             } else {
                 // Show fragment for other IDs
-                Fragment fragment;
+                Fragment fragment = null;
 
                 if (id == 2) {
                     fragment = new PremimumFragment(); // Example fragment
-                } else {
-                    fragment = new PremimumFragment(); // Default fragment
                 }
+                // You can add more conditions here for other fragment types if needed
 
-                // Pass data to the fragment
-                Bundle args = new Bundle();
-                args.putString("image_url", imageUrl);
-                args.putString("title", title);
-                fragment.setArguments(args);
+                if (fragment != null) {
+                    // Pass data to the fragment
+                    Bundle args = new Bundle();
+                    args.putString("image_url", imageUrl);
+                    args.putString("title", title);
+                    fragment.setArguments(args);
 
-                // Begin fragment transaction
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.commit();
+                    // Begin fragment transaction
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentcontainer, fragment);
+                    fragmentTransaction.addToBackStack(null); // Optional
+                    fragmentTransaction.commit();
+
+                } else {
+                    // Handle the case where fragment is null
+                    Log.e("YourTag", "No fragment found for id: " + id);
+                }
             }
+
         }
     }
 }
