@@ -10,12 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.my.audio_video_fm.R;
+import com.my.audio_video_fm.SharedViewModel;
 import com.my.audio_video_fm.activity.EpisodeActivity;
 import com.my.audio_video_fm.activity.Fragment_container;
+import com.my.audio_video_fm.bottomsheet.EpisodeBottomSheet;
 import com.my.audio_video_fm.model.Episode2;
 
 import java.util.List;
@@ -24,10 +30,12 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
     private final List<Episode2> episodes;
     private final Context context;
     private int completedPosition = -1; // Keeps track of which item has completed playback
-
+    private SharedViewModel sharedViewModel;
     public EpisodeAdapter2(Context context, List<Episode2> episodes) {
         this.context = context;
         this.episodes = episodes;
+        this.sharedViewModel = new ViewModelProvider((FragmentActivity) context).get(SharedViewModel.class);
+
     }
 
     @NonNull
@@ -71,11 +79,14 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
                 intent.putExtra("AUDIO_URL", episode.getAudioUrl());
                 context.startActivity(intent);
             } else {
-                Intent intent = new Intent(context, Fragment_container.class);
-                intent.putExtra("ID", episode.getId2()); // Include ID in intent extras
-                context.startActivity(intent);
+                    openBottomSheet(context,episode.getId2());
             }
         });
+
+    }
+    public void openBottomSheet(Context context, int episodeId) {
+        EpisodeBottomSheet bottomSheet = EpisodeBottomSheet.newInstance(episodeId);
+        bottomSheet.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheet.getTag());
     }
 
     @Override

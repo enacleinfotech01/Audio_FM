@@ -55,10 +55,11 @@
                     android:src="@drawable/coins" />
 
                 <TextView
-                    android:layout_width="@dimen/_20sdp"
+                    android:id="@+id/yourTextViewId"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="90"
+                    android:text="100"
                     android:textColor="@color/white" />
 
                 <ImageView

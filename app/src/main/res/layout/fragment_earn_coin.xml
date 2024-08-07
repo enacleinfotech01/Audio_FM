@@ -1,14 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
     tools:context=".fragment.EarnCoinFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_11sdp"
+        android:background="@drawable/rounded_background"
+        android:orientation="horizontal"
+        android:padding="@dimen/_4sdp">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_5sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wallet Balenece"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="how it works ?"
+                android:textColor="@color/gray" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:layout_gravity="center"
+
+            android:layout_marginHorizontal="@dimen/_1sdp"
+            android:src="@drawable/coins" />
+
+        <TextView
+            android:id="@+id/earncoin"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=""
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/chevron_right_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+    </LinearLayout>
+
+</LinearLayout>

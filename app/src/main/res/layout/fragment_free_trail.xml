@@ -143,7 +143,7 @@ android:layout_margin="@dimen/_10sdp"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 android:drawableEnd="@drawable/chevron_right_24dp_e8eaed_fill0_wght400_grad0_opsz24"
-                android:text="Phone Pe"
+                android:text="Add UPI ID"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp" />
         </LinearLayout>
