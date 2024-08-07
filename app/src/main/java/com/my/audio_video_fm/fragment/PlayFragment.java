@@ -5,6 +5,8 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -147,6 +149,7 @@ public class PlayFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), 1));
         adapter2 = new EpisodeAdapter2(requireActivity(), episodes);
         recyclerView.setAdapter(adapter2);
+        simulatePlaybackCompletion(adapter2);
 
         // Setup click listeners
         playMusicImageView.setOnClickListener(v -> togglePlayback());
@@ -316,4 +319,12 @@ public class PlayFragment extends Fragment {
         }
         isExpanded = !isExpanded;
     }
+    private void simulatePlaybackCompletion(EpisodeAdapter2 adapter2) {
+        // Simulate playback completion after 5 seconds
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            // Assume playback is complete for the first item (position 0)
+            adapter2.setPlaybackComplete(0);
+        }, 5000); // 5 seconds delay for simulation
+    }
+
 }

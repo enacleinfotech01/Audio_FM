@@ -112,7 +112,7 @@
                     android:padding="@dimen/_9sdp">
 
                     <TextView
-                        android:layout_width="@dimen/_240sdp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/notifications_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
@@ -140,6 +140,7 @@
                         android:text="Audio Language"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_13sdp" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -159,6 +160,7 @@
                     <TextView
                         android:layout_width="@dimen/_240sdp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/database_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
@@ -185,6 +187,7 @@
                     <TextView
                         android:layout_width="@dimen/_240sdp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/manage_accounts_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
@@ -209,6 +212,7 @@
                     <TextView
                         android:layout_width="@dimen/_240sdp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/select_all_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
@@ -234,6 +238,7 @@
                     <TextView
                         android:layout_width="@dimen/_259sdp"
                         android:layout_height="wrap_content"
+
                         android:layout_gravity="center"
                         android:drawableLeft="@drawable/headset_mic_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
@@ -260,6 +265,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/support_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
@@ -278,6 +284,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/manage_accounts_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
@@ -296,6 +303,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/kid_star_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
@@ -315,6 +323,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+
                         android:drawableLeft="@drawable/manage_accounts_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_9sdp"
@@ -361,6 +370,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/person_alert_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
@@ -381,6 +391,7 @@
                         android:layout_width="@dimen/_270sdp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+
                         android:drawableLeft="@drawable/security_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
@@ -409,6 +420,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/logout_24dp_e8eaed_fill0_wght400_grad0_opsz24"
                         android:drawablePadding="@dimen/_16sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
