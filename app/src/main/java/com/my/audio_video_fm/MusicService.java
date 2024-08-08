@@ -79,8 +79,6 @@ public class MusicService extends Service {
         }
     }
 
-
-
     public void pauseTrack() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();

@@ -65,15 +65,18 @@
             android:name=".activity.MainActivity"
             android:exported="false" />
 
-        <service android:name=".MusicService" android:enabled="true" />
-        <receiver android:name=".NotificationReceiver"
-            android:enabled="true"
-            android:exported="false">
+        <service android:name=".MusicService"
+            android:exported="true">
             <intent-filter>
-                <action android:name="NEXT"/>
-                <action android:name="PREVIOUS"/>
-                <action android:name="PLAY"/>
-
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
+        <receiver android:name=".NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ACTION_PREVIOUS"/>
+                <action android:name="ACTION_PLAY"/>
+                <action android:name="ACTION_NEXT"/>
             </intent-filter>
         </receiver>
     </application>
