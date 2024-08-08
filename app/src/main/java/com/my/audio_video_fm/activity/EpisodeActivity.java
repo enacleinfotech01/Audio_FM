@@ -59,7 +59,7 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
     private boolean isBound = false;
     private boolean isPlaying = false;
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.MyBinder binder = (MusicService.MyBinder) service;
@@ -75,7 +75,6 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
             Log.d("EpisodeActivity", "Service disconnected");
         }
     };
-
 
     TextView speed;
     MusicService musicService;
@@ -94,7 +93,7 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
 
     private TextView startTimeline, endTimeline;
     private Handler handler = new Handler();
-
+    public static final int REQUEST_CODE_NOTIFICATION_PERMISSION = 1;
 
     private TextView musictext;
     private ImageView bluetooth;
@@ -133,6 +132,9 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
                 toggleBluetooth();
             }
         });
+
+        requestNotificationPermission();
+        
         String imageUrl = getIntent().getStringExtra("IMAGE_URL");
         String imageUrl1 = getIntent().getStringExtra("image_url");
         String title = getIntent().getStringExtra("title");
@@ -266,6 +268,18 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
             }
         });
     }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API level 33 and above
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        REQUEST_CODE_NOTIFICATION_PERMISSION);
+            }
+        }
+    }
+
 
     private void onTrackSelected(int position) {
         if (position >= 0 && position < trackFilesArrayList.size()) {
@@ -876,13 +890,13 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
                         .setShowActionsInCompactView(1)); // Shows only the Play/Pause action in compact view
 
         // Ensure notification channel is created
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // API 26 and above
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID_2,
                     "Playback Channel",
                     NotificationManager.IMPORTANCE_LOW
             );
-            NotificationManager manager = getSystemService(NotificationManager.class);
+            NotificationManager manager = this.getSystemService(NotificationManager.class);
             if (manager != null) {
                 manager.createNotificationChannel(channel);
             }
@@ -890,14 +904,14 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
 
         // Notify with the notification
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify( 1, builder.build()); // Use a consistent ID
+        notificationManager.notify(1, builder.build()); // Use a consistent ID
     }
+
 
     private void showSpeedControlBottomSheet() {
         SpeedControlBottomSheetFragment bottomSheetFragment = new SpeedControlBottomSheetFragment();
         bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
     }
-
 
     @Override
     public void onSpeedChanged(float speed) {
@@ -908,7 +922,4 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
             }
         }
     }
-
-
-
 }

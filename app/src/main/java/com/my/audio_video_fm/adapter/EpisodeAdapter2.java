@@ -22,7 +22,7 @@ import java.util.List;
 public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHolder> {
     private final List<Episode2> episodes;
     private final Context context;
-
+    private int completedPosition = -1;
     public EpisodeAdapter2(Context context, List<Episode2> episodes) {
         this.context = context;
         this.episodes = episodes;
@@ -92,6 +92,11 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
     @Override
     public int getItemCount() {
         return episodes.size();
+    }
+
+    public void setPlaybackComplete(int position) {
+        completedPosition = position;
+        notifyDataSetChanged(); // Refresh the RecyclerView to reflect changes
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

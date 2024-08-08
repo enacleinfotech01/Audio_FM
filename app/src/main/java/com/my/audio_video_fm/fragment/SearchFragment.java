@@ -1,5 +1,7 @@
 package com.my.audio_video_fm.fragment;
 
+import static com.my.audio_video_fm.activity.EpisodeActivity.REQUEST_CODE_NOTIFICATION_PERMISSION;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -210,12 +212,15 @@ public class SearchFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_PERMISSION_CODE) {
+        if (requestCode == REQUEST_CODE_NOTIFICATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                promptSpeechInput();
+                // Permission granted
+                Log.d("EpisodeActivity", "Notification permission granted");
             } else {
-                Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                // Permission denied
+                Log.d("EpisodeActivity", "Notification permission denied");
             }
         }
     }
+
 }

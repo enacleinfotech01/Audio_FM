@@ -72,7 +72,7 @@ public class FreeTrailFragment extends Fragment {
                 .appendQueryParameter("pa", "merchant_vpa@bank")
                 .appendQueryParameter("pn", "Merchant Name")
                 .appendQueryParameter("tn", "Payment for FMPremium")
-                .appendQueryParameter("am", "10.00")
+                .appendQueryParameter("am", "1.00")
                 .appendQueryParameter("cu", "INR")
                 .build();
 
