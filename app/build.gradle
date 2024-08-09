@@ -9,8 +9,8 @@ android {
 
     defaultConfig {
         applicationId "com.my.audio_video_fm"
-        minSdk 21
-        targetSdk 33
+        minSdk 24
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -79,5 +79,5 @@ dependencies {
     implementation 'com.android.billingclient:billing:5.1.0'
 
     //razorpay
-  //  implementation 'com.razorpay:checkout:1.6.12'
+   // implementation 'com.razorpay:checkout:1.6.4'
 }
