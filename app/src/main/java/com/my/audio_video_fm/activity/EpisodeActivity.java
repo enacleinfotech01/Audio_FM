@@ -56,28 +56,40 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
     private ImageView targetImageView, playMusic, forward10Sec, replay10Sec, nextMusic, beforeMusic;
     private MediaPlayer mediaPlayer;
     private SeekBar musicSeekBar;
-    private boolean isBound = false;
     private boolean isPlaying = false;
 
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
+    private MusicService musicService;
+    private boolean isBound = false;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.MyBinder binder = (MusicService.MyBinder) service;
             musicService = binder.getService();
             isBound = true;
-            Log.d("EpisodeActivity", "Service bound");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            musicService = null;
             isBound = false;
-            Log.d("EpisodeActivity", "Service disconnected");
         }
     };
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, MusicService.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+    }
     TextView speed;
-    MusicService musicService;
     MediaSessionCompat mediaSession;
     private TextView speedTextView;
     private SeekBar speedSeekBar;
@@ -809,8 +821,6 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
-
-
         countDownTimer = new CountDownTimer(durationInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -828,7 +838,6 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
             }
         }.start();
     }
-
 
     private void stopMusic() {
         // Implement the logic to stop your music playback here
@@ -890,18 +899,11 @@ public class EpisodeActivity extends AppCompatActivity implements TimerBottomShe
                         .setShowActionsInCompactView(1)); // Shows only the Play/Pause action in compact view
 
         // Ensure notification channel is created
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // API 26 and above
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID_2,
-                    "Playback Channel",
-                    NotificationManager.IMPORTANCE_LOW
-            );
-            NotificationManager manager = this.getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_NOTIFICATION_PERMISSION);
             }
         }
-
         // Notify with the notification
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build()); // Use a consistent ID
