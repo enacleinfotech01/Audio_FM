@@ -3,7 +3,6 @@ package com.my.audio_video_fm;
 public class TrackFiles {
     private int id;
 
-
     private String title;
     private String artist;
     private int thumbnail;
@@ -57,6 +56,5 @@ public class TrackFiles {
     }
 
     private int audioResource;
-
 
 }
