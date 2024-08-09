@@ -14,8 +14,6 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.my.audio_video_fm.R;
 import com.my.audio_video_fm.model.CategoryItem;
-import com.my.audio_video_fm.model.MediaItem;
-import com.my.audio_video_fm.model.SharedViewModel;
 import com.my.audio_video_fm.activity.playvideo;
 
 import java.util.List;
@@ -28,7 +26,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MediaItemViewH
     private List<CategoryItem> mediaItems;
     private Context context;
     private OnItemClickListener listener;
-    private SharedViewModel sharedViewModel;
+
 
     public ItemAdapter(List<CategoryItem> mediaItems, Context context, OnItemClickListener listener) {
         this.mediaItems = mediaItems;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/appcolor"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/select_from_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select from Gallery"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/gray"
+        android:layout_height="2dp"/>
+    <TextView
+        android:id="@+id/capture_from_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capture from Camera"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

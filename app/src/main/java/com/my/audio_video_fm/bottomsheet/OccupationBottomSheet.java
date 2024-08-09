@@ -1,14 +1,17 @@
 package com.my.audio_video_fm.bottomsheet;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.my.audio_video_fm.R;
-
+// OccupationBottomSheet.java
 public class OccupationBottomSheet extends BottomSheetDialogFragment {
 
     public interface OnOccupationSelectedListener {
@@ -17,27 +20,60 @@ public class OccupationBottomSheet extends BottomSheetDialogFragment {
 
     private OnOccupationSelectedListener listener;
 
-    public void setOnOccupationSelectedListener(OnOccupationSelectedListener listener) {
-        this.listener = listener;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnOccupationSelectedListener) {
+            listener = (OnOccupationSelectedListener) context;
+        } else if (getParentFragment() instanceof OnOccupationSelectedListener) {
+            listener = (OnOccupationSelectedListener) getParentFragment();
+        } else {
+            throw new ClassCastException(context.toString() + " must implement OnOccupationSelectedListener");
+        }
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet_occupation, container, false);
 
-        // Handle occupation selection and pass the selected occupation back to the listener
-        view.findViewById(R.id.occupation_student).setOnClickListener(v -> {
-            if (listener != null) listener.onOccupationSelected("Engineer");
+        // Find views
+        TextView occupationStudent = view.findViewById(R.id.occupation_student);
+        TextView occupationSelfEmployed = view.findViewById(R.id.occupation_self_employed);
+        TextView occupationGovtEmployee = view.findViewById(R.id.occupation_govt_employee);
+        TextView occupationSalaried = view.findViewById(R.id.occupation_salaried);
+
+        // Set click listeners
+        occupationStudent.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onOccupationSelected("Student");
+            }
             dismiss();
         });
-        // More occupation options...
-        view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
+
+        occupationSelfEmployed.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onOccupationSelected("Self-Employed");
             }
+            dismiss();
         });
+
+        occupationGovtEmployee.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onOccupationSelected("Govt.Employee");
+            }
+            dismiss();
+        });
+
+        occupationSalaried.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onOccupationSelected("Salaried");
+            }
+            dismiss();
+        });
+
+        // Add more occupations as needed
+
         return view;
     }
 }

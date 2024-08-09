@@ -10,7 +10,7 @@ public class User {
     private String imageUri;
     private String name;
     private String bio;
-    private int age;
+    private String age;
     private String gender; // Male, Female, Other
     private String occupation;
 
@@ -46,11 +46,11 @@ public class User {
         this.bio = bio;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -70,7 +70,7 @@ public class User {
         this.occupation = occupation;
     }
 
-    public User(int id, String imageUri, String name, String bio, int age, String gender, String occupation) {
+    public User(int id, String imageUri, String name, String bio, String age, String gender, String occupation) {
         this.id = id;
         this.imageUri = imageUri;
         this.name = name;

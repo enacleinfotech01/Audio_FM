@@ -51,7 +51,8 @@ form=findViewById(R.id.form);
         form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(activirty_setting.this,ActivityReels.class);
+                Intent intent = new Intent(activirty_setting.this, Fragment_container.class);
+                intent.putExtra("dailycheck", 1);
                 startActivity(intent);
             }
         });

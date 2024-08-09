@@ -10,6 +10,9 @@ Dimensions: Ensure @dimen/_50sdp in fragment_play.xml corresponds to your requir
 Play Icon: Ensure res/drawable/play.xml or res/drawable/play.png exists.
 Pause Icon: Ensure res/drawable/pause.xml or res/drawable/pause.png exists.
 Summary
+Play Icon: Ensure res/drawable/play.xml or res/drawable/play.png exists.
+Pause Icon: Ensure res/drawable/pause.xml or res/drawable/pause.png exists.
+Summary
 Create a drawable resource (rounded_background.xml) with rounded corners and a grey background.
 Set this drawable as the background for your ImageView in the layout XML.
 Ensure all drawable resources used in the ImageView (like play/pause icons) are available.
