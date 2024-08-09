@@ -3,6 +3,7 @@ package com.my.audio_video_fm.activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.my.audio_video_fm.R;
 
@@ -21,13 +23,14 @@ import de.hdodenhof.circleimageview.BuildConfig;
 public class activirty_setting extends AppCompatActivity {
     private LinearLayout legalLayout;
     private ImageView arrowImageView;
+    CardView form;
     private boolean isMenuVisible = false;
     private ImageView copyImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activirty_setting);
-
+form=findViewById(R.id.form);
         legalLayout = findViewById(R.id.legal);
         arrowImageView = findViewById(R.id.arrow);
 
@@ -43,6 +46,13 @@ public class activirty_setting extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showPopupMenu(v);
+            }
+        });
+        form.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(activirty_setting.this,ActivityReels.class);
+                startActivity(intent);
             }
         });
     }

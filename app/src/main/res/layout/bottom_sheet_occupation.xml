@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
+    android:padding="16dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_gravity="right|center"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="@dimen/_260sdp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:layout_gravity="center"
+
+        android:text="Select Occupation"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="@dimen/_15sdp"
+        android:layout_gravity="right|center"
+        android:src="@drawable/close_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:layout_height="@dimen/_15sdp"/>
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+
+        <TextView
+            android:id="@+id/occupation_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Student"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:textColor="@color/gray" />
+      <View
+          android:layout_width="match_parent"
+          android:background="@color/gray"
+          android:layout_height="2dp"/>
+
+        <TextView
+            android:id="@+id/occupation_self_employed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:textColor="@color/gray"
+            android:text="Self -Employed" />
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/gray"
+            android:layout_height="2dp"/>
+
+        <TextView
+            android:id="@+id/occupation_govt_employee"
+            android:layout_width="match_parent"
+
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:textColor="@color/gray"
+            android:layout_height="wrap_content"
+            android:text="Govt.Employee" />
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/gray"
+            android:layout_height="2dp"/>
+
+        <TextView
+            android:id="@+id/occupation_salaried"
+            android:layout_width="match_parent"
+
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:textColor="@color/gray"
+            android:layout_height="wrap_content"
+            android:text="Salaried" />
+
+        <!-- Add more occupations as needed -->
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/gray"
+            android:layout_height="2dp"/>
+
+    </LinearLayout>
+</LinearLayout>

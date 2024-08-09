@@ -82,7 +82,5 @@ dependencies {
     implementation "androidx.media3:media3-session:1.0.0"
     implementation "androidx.media3:media3-exoplayer:1.0.0"
     implementation "com.google.guava:guava:31.1-android"  // For Guava utilities
-
     //razorpay
-   // implementation 'com.razorpay:checkout:1.6.4'
 }

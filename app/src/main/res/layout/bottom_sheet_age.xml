@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/appcolor"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_gravity="right|center"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="@dimen/_260sdp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:layout_gravity="center"
+
+            android:text="Select Age Range"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_gravity="right|center"
+            android:src="@drawable/close_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+            android:layout_height="@dimen/_15sdp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+
+        <TextView
+            android:id="@+id/age_15_20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="15-20 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/age_21_25"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="21-25 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/age_26_30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="26-30 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/age_31_35"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="31-35 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/age_36_40"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="36-40 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/age_41_45"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="41-45 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/age_46_50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="46-50 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/age_51_55"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="51-55 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/age_55_60"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="55-60 years"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <TextView
+            android:id="@+id/older"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="Older"
+            android:textColor="@color/gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
+        <!-- Add more age ranges as needed -->
+
+    </LinearLayout>
+</LinearLayout>
