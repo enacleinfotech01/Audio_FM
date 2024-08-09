@@ -80,6 +80,7 @@ public class EpisodeAdapter2 extends RecyclerView.Adapter<EpisodeAdapter2.ViewHo
                 context.startActivity(intent);
             } else {
                     openBottomSheet(context,episode.getId2());
+
             }
         });
 
